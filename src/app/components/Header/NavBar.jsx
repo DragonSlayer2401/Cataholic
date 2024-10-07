@@ -1,0 +1,68 @@
+'use client';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import SearchBar from './SearchBar';
+import './header.css';
+import { Nunito } from 'next/font/google';
+
+const nunito = Nunito({
+  weights: [400, 700],
+  subsets: ['latin'],
+});
+
+const NavBar = () => {
+  return (
+    <header>
+      <Navbar expand="md" className="py-4 px-6 fixed w-full md:flex md:items-center">
+        <Navbar.Brand
+          href="/"
+          className={`me-auto font-bold ${nunito.className}`}
+        >
+          Cataholic
+        </Navbar.Brand>
+        <Navbar.Toggle className='border-none' />
+        <Navbar.Collapse>
+          <Nav className="ms-auto gap-x-4 md:flex md:items-center">
+            <Nav.Link href="/" className={`font-bold ${nunito.className}`}>
+              Home
+            </Nav.Link>
+            <Nav.Link
+              href="/favorites"
+              className={`font-bold ${nunito.className}`}
+            >
+              Favorites
+            </Nav.Link>
+            <NavDropdown
+              title="Profile"
+              className={`font-bold ${nunito.className}`}
+            >
+              <NavDropdown.Item
+                href="/settings"
+                className={`${nunito.className}`}
+              >
+                Settings
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                href="/logout"
+                className={`${nunito.className}`}
+              >
+                Logout
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="/login" className={`font-bold ${nunito.className}`}>
+              Login
+            </Nav.Link>
+            <Nav.Link
+              href="/signup"
+              className={`font-bold ${nunito.className}`}
+            >
+              Signup
+            </Nav.Link>
+            <SearchBar />
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </header>
+  );
+};
+
+export default NavBar;

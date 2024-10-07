@@ -1,0 +1,15 @@
+.hero-section {
+  background: linear-gradient(to bottom, #e6e6fa, #bde0fe);
+  padding-top: 96px;
+  height: 500px;
+}
+
+.hero-section h1,
+.hero-section h2,
+.card-section h2 {
+  color: #a971a9;
+}
+
+.card-section div {
+
+}

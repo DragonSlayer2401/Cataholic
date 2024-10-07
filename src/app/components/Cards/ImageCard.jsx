@@ -1,10 +1,29 @@
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import './card.css';
 
 const ImageCard = ({ src, alt, width, height }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
-    <div className="image-card" style={{width:"250px", height:"187px"}}>
-      <img src={src} alt={alt} width={width} height={height} className='w-full h-full rounded-2xl justify-self-center' />
-    </div>
+    <motion.div
+      className="image-card"
+      animate={
+        imageLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+      }
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="lazy"
+        className="w-full h-full rounded-2xl justify-self-center"
+        onLoad={() => setImageLoaded(true)}
+      />
+    </motion.div>
   );
 };
 

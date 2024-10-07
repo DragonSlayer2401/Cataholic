@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { FaRegHeart, FaHeart } from 'react-icons/fa6';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
+import './modal.css';
 
 const ImageModal = ({ src, alt, imageId }) => {
   const addFavorite = () => {
@@ -22,7 +23,7 @@ const ImageModal = ({ src, alt, imageId }) => {
         </button>
       </ModalFooter>
     </Modal>
-  );      
+  );
 };
 
 export default ImageModal;

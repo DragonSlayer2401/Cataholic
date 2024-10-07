@@ -12,7 +12,7 @@ const nunito = Nunito({
 const NavBar = () => {
   return (
     <header>
-      <Navbar expand="md" className="py-4 px-6 fixed w-full md:flex md:items-center">
+      <Navbar expand="md" className="!z-50 py-4 px-6 fixed w-full md:flex md:items-center">
         <Navbar.Brand
           href="/"
           className={`me-auto font-bold ${nunito.className}`}

@@ -3,16 +3,13 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import './card.css';
 
-const ImageCard = ({ src, alt, width, height }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
+const ImageCard = ({ src, alt, width, height, imageLoadHandler }) => {
   return (
     <motion.div
       className="image-card"
-      animate={
-        imageLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
-      }
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1.8, ease: 'easeOut' }}
     >
       <img
         src={src}
@@ -21,7 +18,7 @@ const ImageCard = ({ src, alt, width, height }) => {
         height={height}
         loading="lazy"
         className="w-full h-full rounded-2xl justify-self-center"
-        onLoad={() => setImageLoaded(true)}
+        onLoad={() => imageLoadHandler()}
       />
     </motion.div>
   );

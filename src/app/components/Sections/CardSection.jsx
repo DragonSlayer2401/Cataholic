@@ -11,31 +11,17 @@ const nunito = Nunito({
 });
 
 const CardSection = ({ title, images }) => {
-  console.log(images);
   // Store loaded images
-  const [visibleImages, setVisibleImages] = useState([]);
-  // Track whether images are loading or not
-  const [batchLoading, setBatchLoading] = useState(false);
+  const [visibleImages, setVisibleImages] = useState(8);
+  const [imageLoadStates, setImageLoadStates] = useState([false]);
   // Reference to the load more spinner
   const loadMoreRef = useRef(null);
 
-  const loadBatch = (startIndex, batchSize) => {
-    const batch = images.slice(startIndex, startIndex + batchSize);
-
-    const imagePromises = batch.map((image, index) => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = image.url;
-        img.onload = () => resolve({image, index: index + startIndex});
-        // If the image fails to load, resolve the promise anyway to prevent blocking
-        img.onerror = () => resolve({image, index: index + startIndex});
-      });
-    });
-
-    Promise.all(imagePromises).then((loadedImages) => {
-      const sortedImages = loadedImages.sort((a, b) => a.index - b.index).map((imageObj) => imageObj.image);
-      setVisibleImages((prevImages) => [...prevImages, ...sortedImages]);
-      setBatchLoading(false);
+  const handleImageLoad = (index) => {
+    setImageLoadStates((prev) => {
+      const newLoadStates = [...prev];
+      newLoadStates[index] = true;
+      return newLoadStates;
     });
   };
 
@@ -43,15 +29,14 @@ const CardSection = ({ title, images }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         // Load more images when the spinner is visible
-        if (entries[0].isIntersecting && !batchLoading) {
-          setBatchLoading(true);
-          loadBatch(visibleImages.length, 12);
+        if (entries[0].isIntersecting) {
+          setVisibleImages((prev) => prev + 8);
         }
       },
       {
         root: null, // observe  spinner relative to the viewport
         rootMargin: '0px', // trigger when the spinner is visible
-        threshold: 0.0, // trigger when any part of the spinner is visible
+        threshold: 0.5, // trigger when any part of the spinner is visible
       }
     );
 
@@ -66,7 +51,7 @@ const CardSection = ({ title, images }) => {
         observer.unobserve(loadMoreRef.current);
       }
     };
-  }, [batchLoading, visibleImages]);
+  }, []);
 
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
@@ -76,7 +61,8 @@ const CardSection = ({ title, images }) => {
         {title}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
-        {visibleImages.map((image) => (
+        {images.slice(0, visibleImages).map((image, index) => (
+          index === 0 || imageLoadStates[index - 1] ?
           <ImageCard
             key={image.id}
             src={image.url}
@@ -87,10 +73,12 @@ const CardSection = ({ title, images }) => {
             }
             width={image.width}
             height={image.height}
-          />
+            imageLoadHandler={() => handleImageLoad(index)}
+            />
+            : <div key={index}></div>
         ))}
       </div>
-      {visibleImages.length < images.length && (
+      {visibleImages < images.length && (
         <Spinner animation="border" role="status" ref={loadMoreRef} />
       )}
     </section>

@@ -1,21 +1,30 @@
-import Image from 'next/image';
 import { FaRegHeart, FaHeart } from 'react-icons/fa6';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalDialog,
+  ModalFooter,
+  ModalHeader,
+} from 'react-bootstrap';
 import './modal.css';
 
-const ImageModal = ({ src, alt, imageId }) => {
+const ImageModal = ({ imageData, show, setShow }) => {
   const addFavorite = () => {
     // Add favorite logic here
   };
 
   return (
-    <Modal size="lg" centered>
-      <ModalHeader closeButton />
-      <ModalBody>
-        <Image src={src} alt={alt} width={800} height={600} />
+    <Modal size="lg" centered show={show} onHide={() => setShow(false)}>
+      <ModalHeader closeButton className="border-none" />
+      <ModalBody className="p-0">
+        <img src={imageData.src} alt={imageData.alt} width={800} height={600} />
       </ModalBody>
-      <ModalFooter>
-        <button type="button" onClick={() => addFavorite()}>
+      <ModalFooter className="flex justify-center">
+        <button
+          type="button"
+          onClick={() => addFavorite()}
+          className="flex items-center gap-2"
+        >
           Favorite
           <span>
             <FaRegHeart />

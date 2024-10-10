@@ -1,0 +1,36 @@
+.modal-header .btn-close {
+  --bs-btn-close-opacity: 1;
+  --bs-btn-close-hover-opacity: 0.75;
+  --bs-btn-close-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23a971a9'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E");
+}
+
+.modal-content {
+  border-radius: 16px !important;
+  width: 45vw !important;
+}
+
+.modal-body img {
+  width: 100%;
+  aspect-ratio: 4 / 3 !important;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .modal-content {
+    width: 60vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .modal-content {
+    width: 95vw;
+  }
+}
+
+@media screen and (min-width: 0) and (max-width: 1199px) {
+  .modal-lg,
+  .modal-xl,
+  .modal-md,
+  .modal-sm {
+    justify-content: center;
+  }
+}

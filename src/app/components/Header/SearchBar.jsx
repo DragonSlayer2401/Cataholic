@@ -1,7 +1,10 @@
+"use client"
 import { FaSearch } from 'react-icons/fa';
 import { Nunito } from 'next/font/google';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import './header.css';
+
 
 
 const nunito = Nunito({
@@ -11,10 +14,11 @@ const nunito = Nunito({
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(searchTerm);
+    router.push(`/search/?q=${searchTerm}`);
   }
 
   return (

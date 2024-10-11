@@ -1,5 +1,6 @@
 .hero-section {
   background: linear-gradient(to bottom, #e6e6fa, #bde0fe);
+  width: 100vw;
   padding-top: 96px;
   height: 500px;
 }

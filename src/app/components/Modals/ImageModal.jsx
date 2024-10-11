@@ -7,6 +7,12 @@ import {
   ModalHeader,
 } from 'react-bootstrap';
 import './modal.css';
+import { Nunito } from 'next/font/google';
+
+const nunito = Nunito({
+  weights: [700],
+  subsets: ['latin'],
+});
 
 const ImageModal = ({ imageData, show, setShow }) => {
   const addFavorite = () => {
@@ -15,15 +21,15 @@ const ImageModal = ({ imageData, show, setShow }) => {
 
   return (
     <Modal size="lg" centered show={show} onHide={() => setShow(false)}>
-      <ModalHeader closeButton className="border-none" />
+      <ModalHeader closeButton className="p-4 border-none" />
       <ModalBody className="p-0">
         <img src={imageData.src} alt={imageData.alt} width={800} height={600} />
       </ModalBody>
-      <ModalFooter className="flex justify-center">
+      <ModalFooter className="flex justify-center p-4 border-none">
         <button
           type="button"
           onClick={() => addFavorite()}
-          className="flex items-center gap-2"
+          className={`flex items-center gap-2 font-bold text-white px-6 rounded-3xl h-11 !text-base md:!text-lg ${nunito.className}`}
         >
           Favorite
           <span>

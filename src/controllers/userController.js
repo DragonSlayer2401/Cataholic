@@ -16,8 +16,7 @@ export const findUserById = async (userId) => {
 
     return foundUser;
   } catch (error) {
-    console.error(error);
-    throw new Error('Error finding user by ID');
+    throw new Error(`Error finding user by ID: ${error.message}`);
   }
 };
 
@@ -34,8 +33,7 @@ export const findUserByUsername = async (username) => {
 
     return foundUser;
   } catch (error) {
-    console.error(error);
-    throw new Error('Error finding user by username');
+    throw new Error(`Error finding user by username: ${error.message}`);
   }
 };
 
@@ -45,26 +43,94 @@ export const createUser = async (userObj) => {
 
   try {
     const newUser = new User(userObj);
-    await newUser.save();
+    const savedUser = await newUser.save();
+    return savedUser;
   } catch (error) {
-    console.error(error);
-    throw new Error('Error creating user');
+    throw new Error(`Error creating user: ${error.message}`);
   }
-
-  return newUser;
 };
 
 // Updates username or password
 export const updateUser = async (userId, updateObj) => {
   await dbConnect();
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateObj },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return null;
+    }
+
+    return updatedUser;
+  } catch (error) {
+    throw new Error(`Error updating user: ${error.message}`);
+  }
 };
 
 // Deletes a user
 export const deleteUser = async (userId) => {
   await dbConnect();
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return null;
+    }
+
+    return deletedUser;
+  } catch (error) {
+    throw new Error(`Error deleting user: ${error.message}`);
+  }
 };
 
 // Adds favorited images to a user
-export const updateFavorites = async (userId, favoriteObj) => {
-    await dbConnect();
+export const updateFavorites = async (userId, favorites) => {
+  await dbConnect();
+
+  try {
+    const updatedFavorites = await User.findByIdAndUpdate(
+      userId,
+      { $set: { favorites: favorites } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedFavorites) {
+      return null;
+    }
+
+    return updatedFavorites;
+  } catch (error) {
+    throw new Error(`Error updating favorites: ${error.message}`);
+  }
+};
+
+export const hashPassword = async (password) => {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+  } catch (error) {
+    throw new Error(`Error hashing password: ${error.message}`);
+  }
+};
+
+export const generateJWT = (user) => {
+  try {
+    const signedJWT = jwt.sign(
+      {
+        data: { id: user.id, username: user.username },
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return signedJWT;
+  } catch (error) {
+    throw new Error(`Error generating JWT: ${error.message}`);
+  }
 };

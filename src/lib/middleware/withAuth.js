@@ -4,7 +4,7 @@ export const withAuth = (handler) => {
   return async (req) => {
     // Extracts the token from the Authorization header
     const authHeader = req.headers.get('Authorization');
-    // Check if the Authorization header is present and gets the token
+    // Check if the Authorization header is present and get the token
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {

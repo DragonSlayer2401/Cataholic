@@ -119,6 +119,15 @@ export const hashPassword = async (password) => {
   }
 };
 
+export const verifyPassword = async (password, hashedPassword) => {
+  try {
+    const success = await bcrypt.compare(password, hashedPassword);
+    return success;
+  } catch (error) {
+    throw new Error(`Error verifying password: ${error.message}`);
+  }
+};
+
 export const generateJWT = (user) => {
   try {
     const signedJWT = jwt.sign(

@@ -9,12 +9,12 @@ export async function POST(req) {
   const body = await req.json();
   const { username, password } = body;
   // Check if a user already exists by the supplied username
-  const foundUser = await findUserByUsername(username);
+  const foundUser = await findUserByUsername(username.toLowerCase());
 
   if (!foundUser) {
     const hashedPassword = await hashPassword(password);
     const createdUser = await createUser({
-      username,
+      username: username.toLowerCase(),
       password: hashedPassword,
     });
 

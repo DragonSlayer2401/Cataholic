@@ -17,7 +17,7 @@ export const withAuth = (handler) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       // Adds the user to the request object
-      req.user = { username: decoded.username, id: decoded.id };
+      req.user = { username: decoded.data.username, id: decoded.data.id };
       // Proceeds to the route handler
       return handler(req);
     } catch (error) {

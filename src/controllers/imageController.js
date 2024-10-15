@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const findRandomImages = async (limit, page, order = 'RAND') => {
+export const findRandomImages = async (limit, page, order) => {
   try {
     const response = await axios.get(
       `${process.env.API_BASE_URL}?limit=${limit}&page=${page}&order=${order}&api_key=${process.env.API_KEY}`
@@ -20,7 +20,7 @@ export const findRandomImages = async (limit, page, order = 'RAND') => {
 export const findImagesByBreeds = async (
   limit,
   page,
-  order = 'RAND',
+  order,
   breedIds
 ) => {
   try {

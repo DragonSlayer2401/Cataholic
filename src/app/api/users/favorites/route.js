@@ -13,7 +13,7 @@ export async function GET(req) {
 
     if (breedIds.length === 0) {
       return NextResponse.json(
-        { message: `Sorry, we do not have any ${breeds} images` },
+        { message: `Sorry, we do not have any ${breeds.join(', ')} images` },
         { status: 404 }
       );
     }

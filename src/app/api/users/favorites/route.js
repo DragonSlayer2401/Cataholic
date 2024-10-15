@@ -1,6 +1,15 @@
+import { findUserById } from '@/controllers/userController';
+import { withAuth } from '@/lib/middleware/withAuth';
 import { NextResponse } from 'next/server';
 
+export const GET = withAuth(async (req) => {
+  const user = req.user;
+  const foundUser = await findUserById(user.id);
 
-export async function GET(req) {
+  const favorites = foundUser?.favorites || [];
 
-}
+  return NextResponse.json(
+    { message: 'Successfully retrieved favorites', favorites },
+    { status: 200 }
+  );
+});

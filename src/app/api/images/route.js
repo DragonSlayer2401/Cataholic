@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { findBreedIds } from '@/controllers/imageController';
+import { findBreedIds, findImagesByBreeds, findRandomImages } from '@/controllers/imageController';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);

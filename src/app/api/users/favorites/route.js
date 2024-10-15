@@ -8,7 +8,7 @@ export async function GET(req) {
   const breeds = searchParams.get('breeds')?.split(',');
   let response;
 
-  if (breeds.length > 0) {
+  if (breeds && breeds.length > 0) {
     const breedIds = findBreedIds(breeds);
 
     if (breedIds.length === 0) {

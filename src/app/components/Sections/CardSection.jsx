@@ -7,13 +7,12 @@ import ImageModal from '../Modals/ImageModal';
 import axios from 'axios';
 import './section.css';
 
-
 const nunito = Nunito({
   weights: [700],
   subsets: ['latin'],
 });
 
-const CardSection = ({ title, initialImages, breeds = [] }) => {
+const CardSection = ({ title, initialImages, breeds }) => {
   // Store the fetched images
   const [images, setImages] = useState(initialImages);
   // Store the current page number
@@ -25,7 +24,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
   // Store number of viewable images
   const [visibleImages, setVisibleImages] = useState(12);
   // Store the load state of each image
-  const [imageLoadStates, setImageLoadStates] = useState([]);
+  const [imageLoadStates, setImageLoadStates] = useState([...new Array(initialImages.length).fill(false)]);
   // Store the modal show state
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
@@ -46,7 +45,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
       const limit = 12;
 
       const response =
-        breeds.length > 0
+        breeds && breeds.length > 0
           ? await axios.get(
               `/api/images?limit=${limit}&page=${page}&breeds=${breeds}`
             )
@@ -57,6 +56,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
         setHasMoreImages(false);
       } else {
         setImages((prev) => [...prev, ...imageArray]);
+        setImageLoadStates((prev) => [...prev, ...new Array(imageArray.length).fill(false)]);
       }
     } catch (error) {
       console.error(error);
@@ -154,7 +154,9 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
                 key={image.id}
                 src={image.url}
                 alt={
-                  console.log(image)
+                  image.breeds.length > 0
+                    ? image.breeds[0].name
+                    : 'unknown breed cat'
                 }
                 id={image.id}
                 width={image.width}
@@ -163,7 +165,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (
-                <div key={index}>{console.log(image)}</div>
+                <div key={index}></div>
             )
           )}
       </div>

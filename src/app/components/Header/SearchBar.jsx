@@ -1,8 +1,6 @@
 "use client"
 import { FaSearch } from 'react-icons/fa';
 import { Nunito } from 'next/font/google';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import './header.css';
 
 
@@ -13,25 +11,26 @@ const nunito = Nunito({
 });
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const router = useRouter();
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    router.push(`/search/?q=${searchTerm}`);
-  }
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   router.replace(`/search/?q=${searchTerm}`);
+  //   router.refresh();
+  // }
 
   return (
-    <form className="flex items-center bg-white rounded-3xl p-1 h-full" id="search-bar" onSubmit={(e) => handleSubmit(e)}>
+    <form className="flex items-center bg-white rounded-3xl p-1 h-full" id="search-bar" method='GET' action="/search/">
       <input
         type="text"
+        name='q'
         placeholder="Search for cat breeds"
-        onChange={(e) => setSearchTerm(e.target.value)}
         className={`border-none bg-transparent rounded-3xl py-2 px-4 ${nunito.className}`}
       />
-      <span className='cursor-pointer' onClick={handleSubmit}>
+      <button type='submit'>
         <FaSearch id='search-icon' />
-      </span>
+      </button>
     </form>
   );
 };

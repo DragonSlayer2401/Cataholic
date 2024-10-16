@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { findBreedIds, findImagesByBreeds, findRandomImages } from '@/controllers/imageController';
 
+// api/images/route.js
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const limit = searchParams.get('limit');

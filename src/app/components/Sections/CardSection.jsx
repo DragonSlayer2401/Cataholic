@@ -3,19 +3,29 @@ import { useEffect, useRef, useState } from 'react';
 import { Nunito } from 'next/font/google';
 import { Spinner } from 'react-bootstrap';
 import ImageCard from '../Cards/ImageCard';
-import './section.css';
 import ImageModal from '../Modals/ImageModal';
+import axios from 'axios';
+import './section.css';
+
 
 const nunito = Nunito({
   weights: [700],
   subsets: ['latin'],
 });
 
-const CardSection = ({ title, images }) => {
-  // Store loaded images
-  const [visibleImages, setVisibleImages] = useState(8);
+const CardSection = ({ title, initialImages, breeds = [] }) => {
+  // Store the fetched images
+  const [images, setImages] = useState(initialImages);
+  // Store the current page number
+  const [page, setPage] = useState(0);
+  // Store whether or not images ae being fetched
+  const [loading, setLoading] = useState(false);
+  // Store whether or not there are more images to fetch
+  const [hasMoreImages, setHasMoreImages] = useState(true);
+  // Store number of viewable images
+  const [visibleImages, setVisibleImages] = useState(12);
   // Store the load state of each image
-  const [imageLoadStates, setImageLoadStates] = useState([false]);
+  const [imageLoadStates, setImageLoadStates] = useState([]);
   // Store the modal show state
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
@@ -23,12 +33,46 @@ const CardSection = ({ title, images }) => {
   // Reference to the load more spinner
   const loadMoreRef = useRef(null);
 
+  // Create references to the states to use inside of the observer to overcome stale closures
+  const loadingRef = useRef(loading);
+  const hasMoreImagesRef = useRef(hasMoreImages);
+  const visibleImagesRef = useRef(visibleImages);
+  const imagesLengthRef = useRef(images.length);
+
+  const getImages = async () => {
+    setLoading(true);
+    try {
+      // number of images to fetch
+      const limit = 12;
+
+      const response =
+        breeds.length > 0
+          ? await axios.get(
+              `/api/images?limit=${limit}&page=${page}&breeds=${breeds}`
+            )
+          : await axios.get(`/api/images?limit=${limit}&page=${page}`);
+
+      const imageArray = response.data.imageDataArray;
+      if (imageArray.length === 0) {
+        setHasMoreImages(false);
+      } else {
+        setImages((prev) => [...prev, ...imageArray]);
+      }
+    } catch (error) {
+      console.error(error);
+      setHasMoreImages(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Set image data to be showed in Modal
   const sendImage = (src, alt, id) => {
     setShow(true);
     setImageData({ src, alt, id });
-    console.log('Image data:', imageData);
   };
 
+  // Updates the load state of an image
   const handleImageLoad = (index) => {
     setImageLoadStates((prev) => {
       const newLoadStates = [...prev];
@@ -37,18 +81,47 @@ const CardSection = ({ title, images }) => {
     });
   };
 
+  // Fetch images when the component is mounted or page changes
+  useEffect(() => {
+    if (hasMoreImages && page > 0) {
+      getImages();
+    }
+  }, [page, hasMoreImages]);
+
+  // Update the references when the states change
+  useEffect(() => {
+    loadingRef.current = loading;
+    hasMoreImagesRef.current = hasMoreImages;
+    visibleImagesRef.current = visibleImages;
+    imagesLengthRef.current = images.length;
+  }, [loading, hasMoreImages, visibleImages, images.length]);
+
+  // Create the observer to load more images when the loading spinner is visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // Load more images when the spinner is visible
-        if (entries[0].isIntersecting) {
+        // Display more images when the spinner is visible
+        if (
+          entries[0].isIntersecting &&
+          !loadingRef.current &&
+          hasMoreImagesRef.current
+        ) {
           setVisibleImages((prev) => prev + 8);
+        }
+
+        // Fetch more images when all images are visible
+        if (
+          visibleImagesRef.current >= imagesLengthRef.current &&
+          !loadingRef.current &&
+          hasMoreImagesRef.current
+        ) {
+          setPage((prev) => prev + 1);
         }
       },
       {
-        root: null, // observe  spinner relative to the viewport
+        root: null, // observe spinner relative to the viewport
         rootMargin: '0px', // trigger when the spinner is visible
-        threshold: 0.5, // trigger when any part of the spinner is visible
+        threshold: 0.0, // trigger when any part of the spinner is visible
       }
     );
 
@@ -76,14 +149,12 @@ const CardSection = ({ title, images }) => {
         {images
           .slice(0, visibleImages)
           .map((image, index) =>
-            index === 0 || imageLoadStates[index - 1] ? (
+            index === 0 || imageLoadStates[index - 1] === true ? (
               <ImageCard
                 key={image.id}
                 src={image.url}
                 alt={
-                  image.breeds.length > 0
-                    ? `${image.breeds[0].name} cat`
-                    : 'unknown breed cat'
+                  console.log(image)
                 }
                 id={image.id}
                 width={image.width}
@@ -92,11 +163,11 @@ const CardSection = ({ title, images }) => {
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (
-              <div key={index}></div>
+                <div key={index}>{console.log(image)}</div>
             )
           )}
       </div>
-      {visibleImages < images.length && (
+      {hasMoreImages && (
         <Spinner animation="border" role="status" ref={loadMoreRef} />
       )}
       <ImageModal imageData={imageData} show={show} setShow={setShow} />

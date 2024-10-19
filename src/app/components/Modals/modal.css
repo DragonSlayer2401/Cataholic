@@ -1,3 +1,8 @@
+/* =========================
+   Modal Header Styles
+   ========================= */
+
+/* Styling for the close button in the modal header */
 .modal-header .btn-close {
   --bs-btn-close-opacity: 1;
   --bs-btn-close-hover-opacity: 1;
@@ -6,17 +11,28 @@
   transition: background-image 0.3s ease-in-out;
 }
 
+/* Change close button background on hover */
 .modal-header .btn-close:hover {
   --bs-btn-close-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23a971a9'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E");
 }
 
+/* Remove default outline on active state */
 .modal-header .btn-close:active {
   outline: none;
 }
 
+/* =========================
+   General Modal Content Styles
+   ========================= */
+
+/* Border radius for modal content */
 .modal-content {
   border-radius: 16px !important;
 }
+
+/* =========================
+   Authentication Modal Styles
+   ========================= */
 
 #auth-modal .modal-header .btn-close {
   margin: 0;
@@ -43,25 +59,30 @@
   border-radius: 8px !important;
 }
 
+/* Focus state styling for password container and buttons */
 #auth-modal .password-container:focus-visible,
 #auth-modal button:focus-visible {
   outline: 2px solid #a971a9 !important;
   box-shadow: none !important;
 }
 
+/* Remove focus shadow for input fields */
 #auth-modal input:focus {
   box-shadow: none !important;
 }
 
+/* Button styles for footer in authentication modal */
 #auth-modal .modal-footer button {
   background: #ffb6c1;
   transition: background-color 0.3s ease;
 }
 
+/* Button hover state for footer in authentication modal */
 #auth-modal .modal-footer button:hover {
   background: #a971a9;
 }
 
+/* Status messages styling */
 #auth-modal .success-check,
 #auth-modal li {
   color: #a971a9;
@@ -71,6 +92,7 @@
   color: #ffb6c1;
 }
 
+/* Password container colors */
 #auth-modal .password-container {
   color: #ffb6c1;
 }
@@ -80,26 +102,36 @@
   color: #ffb6c1;
 }
 
+/* =========================
+   Image Modal Styles
+   ========================= */
+
 #image-modal .modal-content {
   max-width: 800px;
   width: 90vw !important;
 }
 
+/* Image styling inside image modal */
 #image-modal .modal-body img {
   width: 100%;
   aspect-ratio: 4 / 3 !important;
 }
 
+/* Button styles for footer in image modal */
 #image-modal .modal-footer button {
   background: #ffb6c1;
   transition: background-color 0.3s ease-in-out;
 }
 
+/* Button hover state for footer in image modal */
 #image-modal .modal-footer button:hover {
   background: #a971a9;
 }
 
-/* Override Bootstrap's default modal sizes */
+/* =========================
+   Override Bootstrap Modal Sizes
+   ========================= */
+
 .modal-lg,
 .modal-xl,
 .modal-md,
@@ -108,14 +140,18 @@
   justify-content: center;
 }
 
-/* Tablet */
+/* =========================
+   Responsive Styling
+   ========================= */
+
+/* Tablet-specific styling */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   #image-modal .modal-content {
     width: 80vw !important;
   }
 }
 
-/* Mobile */
+/* Mobile-specific styling */
 @media screen and (max-width: 767px) {
   .modal-content {
     width: 95vw !important;

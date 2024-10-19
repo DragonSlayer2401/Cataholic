@@ -3,6 +3,8 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import SearchBar from './SearchBar';
 import './header.css';
 import { Nunito } from 'next/font/google';
+import AuthModal from '../Modals/AuthModal';
+import { useState } from 'react';
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -10,16 +12,28 @@ const nunito = Nunito({
 });
 
 const NavBar = () => {
+  // Store the modal show state
+  const [show, setShow] = useState(false);
+  const [modalData, setModalData] = useState({ title: '', type: '' });
+
+  const handleAuthModal = (title, type) => {
+    setModalData({ title, type });
+    setShow(true);
+  };
+
   return (
     <header>
-      <Navbar expand="md" className="!z-50 py-4 px-6 fixed w-full md:flex md:items-center">
+      <Navbar
+        expand="md"
+        className="!z-50 py-4 px-6 fixed w-full md:flex md:items-center"
+      >
         <Navbar.Brand
           href="/"
           className={`me-auto font-bold ${nunito.className}`}
         >
           Cataholic
         </Navbar.Brand>
-        <Navbar.Toggle className='border-none' />
+        <Navbar.Toggle className="border-none" />
         <Navbar.Collapse>
           <Nav className="ms-auto gap-x-4 md:flex md:items-center">
             <Nav.Link href="/" className={`font-bold ${nunito.className}`}>
@@ -48,11 +62,14 @@ const NavBar = () => {
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="/login" className={`font-bold ${nunito.className}`}>
+            <Nav.Link
+              onClick={() => handleAuthModal('Welcome Back!', 'login')}
+              className={`font-bold ${nunito.className}`}
+            >
               Login
             </Nav.Link>
             <Nav.Link
-              href="/signup"
+              onClick={() => handleAuthModal('Join Our Community!', 'signup')}
               className={`font-bold ${nunito.className}`}
             >
               Signup
@@ -61,6 +78,12 @@ const NavBar = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      <AuthModal
+        show={show}
+        setShow={setShow}
+        title={modalData.title}
+        type={modalData.type}
+      />
     </header>
   );
 };

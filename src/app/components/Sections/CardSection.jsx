@@ -24,19 +24,15 @@ const CardSection = ({ title, initialImages, breeds }) => {
   // Store number of viewable images
   const [visibleImages, setVisibleImages] = useState(12);
   // Store the load state of each image
-  const [imageLoadStates, setImageLoadStates] = useState([...new Array(initialImages.length).fill(false)]);
+  const [imageLoadStates, setImageLoadStates] = useState([
+    ...new Array(initialImages.length).fill(false),
+  ]);
   // Store the modal show state
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
   const [imageData, setImageData] = useState({ src: '', alt: '', id: '' });
   // Reference to the load more spinner
   const loadMoreRef = useRef(null);
-
-  // Create references to the states to use inside of the observer to overcome stale closures
-  const loadingRef = useRef(loading);
-  const hasMoreImagesRef = useRef(hasMoreImages);
-  const visibleImagesRef = useRef(visibleImages);
-  const imagesLengthRef = useRef(images.length);
 
   const getImages = async () => {
     setLoading(true);
@@ -56,7 +52,10 @@ const CardSection = ({ title, initialImages, breeds }) => {
         setHasMoreImages(false);
       } else {
         setImages((prev) => [...prev, ...imageArray]);
-        setImageLoadStates((prev) => [...prev, ...new Array(imageArray.length).fill(false)]);
+        setImageLoadStates((prev) => [
+          ...prev,
+          ...new Array(imageArray.length).fill(false),
+        ]);
       }
     } catch (error) {
       console.error(error);
@@ -88,33 +87,17 @@ const CardSection = ({ title, initialImages, breeds }) => {
     }
   }, [page, hasMoreImages]);
 
-  // Update the references when the states change
-  useEffect(() => {
-    loadingRef.current = loading;
-    hasMoreImagesRef.current = hasMoreImages;
-    visibleImagesRef.current = visibleImages;
-    imagesLengthRef.current = images.length;
-  }, [loading, hasMoreImages, visibleImages, images.length]);
-
   // Create the observer to load more images when the loading spinner is visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         // Display more images when the spinner is visible
-        if (
-          entries[0].isIntersecting &&
-          !loadingRef.current &&
-          hasMoreImagesRef.current
-        ) {
-          setVisibleImages((prev) => prev + 8);
+        if (entries[0].isIntersecting && !loading && hasMoreImages) {
+          setVisibleImages((prev) => prev + 12);
         }
 
         // Fetch more images when all images are visible
-        if (
-          visibleImagesRef.current >= imagesLengthRef.current &&
-          !loadingRef.current &&
-          hasMoreImagesRef.current
-        ) {
+        if (visibleImages >= images.length && !loading && hasMoreImages) {
           setPage((prev) => prev + 1);
         }
       },
@@ -136,7 +119,12 @@ const CardSection = ({ title, initialImages, breeds }) => {
         observer.unobserve(loadMoreRef.current);
       }
     };
-  }, []);
+  }, [
+    loading,
+    hasMoreImages,
+    images.length,
+    visibleImages,
+  ]);
 
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
@@ -165,7 +153,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (
-                <div key={index}></div>
+              <div key={index}></div>
             )
           )}
       </div>

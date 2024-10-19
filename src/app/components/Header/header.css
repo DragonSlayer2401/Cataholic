@@ -15,10 +15,8 @@
 
 .nav-link:hover,
 .navbar-brand:hover,
-.nav-link:focus,
 .nav-link:active,
 .nav-link.show,
-.navbar-brand:focus,
 #search-bar input,
 #search-bar input::placeholder,
 #search-icon,
@@ -26,10 +24,16 @@
   color: #a971a9 !important;
 }
 
+.nav-link:focus,
+.navbar-brand:focus {
+  color: white !important;
+}
+
 .nav-link:focus-visible,
 .navbar-brand:focus-visible,
 #search-bar:focus-within {
   outline: 2px solid #a971a9 !important;
+  color: #a971a9 !important;
   box-shadow: none !important;
 }
 

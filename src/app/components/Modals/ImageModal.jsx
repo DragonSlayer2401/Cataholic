@@ -1,11 +1,5 @@
 import { FaRegHeart, FaHeart } from 'react-icons/fa6';
-import {
-  Modal,
-  ModalBody,
-  ModalDialog,
-  ModalFooter,
-  ModalHeader,
-} from 'react-bootstrap';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import './modal.css';
 import { Nunito } from 'next/font/google';
 
@@ -20,7 +14,13 @@ const ImageModal = ({ imageData, show, setShow }) => {
   };
 
   return (
-    <Modal size="lg" centered show={show} onHide={() => setShow(false)}>
+    <Modal
+      size="lg"
+      centered
+      show={show}
+      onHide={() => setShow(false)}
+      id="image-modal"
+    >
       <ModalHeader closeButton className="p-4 border-none" />
       <ModalBody className="p-0">
         <img src={imageData.src} alt={imageData.alt} width={800} height={600} />

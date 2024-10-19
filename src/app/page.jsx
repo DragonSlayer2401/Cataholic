@@ -25,7 +25,7 @@ export default async function Home() {
         heading="Welcome to Kitty Paradise!"
         subheading="Where fluffy tails and purrs make everything better."
       />
-      <CardSection title="Our Adorable Cats" initialImages={images} />
+      {/* <CardSection title="Our Adorable Cats" initialImages={images} /> */}
     </>
   );
 }

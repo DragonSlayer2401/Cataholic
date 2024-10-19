@@ -19,6 +19,7 @@ const chewy = Chewy({
 
 const AuthModal = ({ show, setShow, title, type }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -71,7 +72,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
               name="email"
               placeholder="Enter your email"
               aria-invalid={errors.email ? 'true' : 'false'}
-              className={`text-sm sm:text-base p-3 rounded-lg border ${nunito.className}`}
+              className={`text-base p-3 border ${nunito.className}`}
               {...register('email', {
                 required: 'Email address is required',
                 pattern: {
@@ -106,7 +107,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
                 placeholder="Enter your password"
                 aria-describedby="password-help"
                 aria-invalid={errors.password ? 'true' : 'false'}
-                className="text-base p-3 border-none"
+                className={`text-base p-3 border-none ${nunito.className}`}
                 {...register('password', {
                   required: 'Password is required',
                   minLength: {
@@ -124,7 +125,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
                 type="button"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
+                className="password-toggle mr-1"
               >
                 {showPassword ? (
                   <FaEye className="password-visible" />
@@ -196,7 +197,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
                   name="confirmPassword"
                   placeholder="Enter your password"
                   aria-invalid={errors.confirmPassword ? 'true' : 'false'}
-                  className="text-base p-3 border-none"
+                  className={`text-base p-3 border-none ${nunito.className}`}
                   {...register('confirmPassword', {
                     required: 'Confirm Password is required',
                     validate: (value) =>
@@ -205,11 +206,13 @@ const AuthModal = ({ show, setShow, title, type }) => {
                 />
                 <button
                   type="button"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle"
+                  aria-label={
+                    showConfirmPassword ? 'Hide password' : 'Show password'
+                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="password-toggle mr-1"
                 >
-                  {showPassword ? (
+                  {showConfirmPassword ? (
                     <FaEye className="password-visible" />
                   ) : (
                     <PiEyeClosedBold className="password-hidden" />

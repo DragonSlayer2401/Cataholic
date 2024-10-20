@@ -8,7 +8,8 @@ import { Nunito, Chewy } from 'next/font/google';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import './modal.css';
-import { set } from 'mongoose';
+import { useDispatch } from 'react-redux';
+import { setLoggedIn } from '../../redux/authSlice';
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -21,6 +22,7 @@ const chewy = Chewy({
 });
 
 const AuthModal = ({ show, setShow, title, type }) => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
@@ -43,6 +45,42 @@ const AuthModal = ({ show, setShow, title, type }) => {
     number: /\d/.test(password),
   };
 
+  const loginUser = async (data) => {
+    try {
+      const response = await axios.post(
+        `/api/users/auth/login`,
+        {
+          email: data.email,
+          password: data.password,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        toast.success('Login successful', {
+          theme: 'colored',
+        });
+
+        dispatch(setLoggedIn(true));
+
+        setTimeout(() => {
+          setShow(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response?.status === 401) {
+        toast.error('Invalid credentials', {
+          theme: 'colored',
+        });
+      } else {
+        toast.error('Login failed. Please try again later.', {
+          theme: 'colored',
+        });
+      }
+    }
+  };
+
   const signupUser = async (data) => {
     try {
       const response = await axios.post(`/api/users/auth/signup`, {
@@ -60,37 +98,6 @@ const AuthModal = ({ show, setShow, title, type }) => {
         });
       } else {
         toast.error('Signup failed. Please try again later.', {
-          theme: 'colored',
-        });
-      }
-    }
-  };
-
-  const loginUser = async (data) => {
-    try {
-      const response = await axios.post(`/api/users/auth/login`, {
-        email: data.email,
-        password: data.password,
-      });
-
-      if (response.status === 200) {
-        toast.success('Login successful', {
-          theme: 'colored',
-        });
-
-        localStorage.setItem('token', response.data.token);
-
-        setTimeout(() => {
-          setShow(false);
-        }, 5500);
-      }
-    } catch (error) {
-      if (error.response.status === 401) {
-        toast.error('Invalid credentials', {
-          theme: 'colored',
-        });
-      } else {
-        toast.error('Login failed. Please try again later.', {
           theme: 'colored',
         });
       }
@@ -321,7 +328,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
       </Form>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={1500}
         newestOnTop={true}
         closeOnClick
         pauseOnHover

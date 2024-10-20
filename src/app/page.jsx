@@ -1,3 +1,4 @@
+
 import NavBar from './components/Header/NavBar';
 import HeroSection from './components/Sections/HeroSection';
 import CardSection from './components/Sections/CardSection';
@@ -8,7 +9,9 @@ const getImages = async () => {
     // number of images to fetch
     const limit = 12;
 
-    const response = await axios.get(`${process.env.BASE_URL}/api/images?limit=${limit}&page=0`);
+    const response = await axios.get(
+      `${process.env.BASE_URL}/api/images?limit=${limit}&page=0`
+    );
 
     return response.data.imageDataArray;
   } catch (error) {

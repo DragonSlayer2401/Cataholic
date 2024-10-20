@@ -20,7 +20,7 @@ const getImages = async (breeds) => {
   }
 };
 
-export default async function Search({searchParams}) {
+export default async function Search({ searchParams }) {
   const breeds = searchParams.q;
   const images = await getImages(breeds.split(','));
   return (
@@ -30,7 +30,11 @@ export default async function Search({searchParams}) {
         heading="Welcome to Kitty Paradise!"
         subheading="Where fluffy tails and purrs make everything better."
       />
-      <CardSection title="Our Adorable Cats" initialImages={images} breeds={breeds} />
+      <CardSection
+        title="Our Adorable Cats"
+        initialImages={images}
+        breeds={breeds}
+      />
     </>
   );
 }

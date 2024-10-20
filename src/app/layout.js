@@ -7,8 +7,6 @@ export const metadata = {
   description: 'Find cat images',
 };
 
-
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

@@ -1,8 +1,8 @@
-
 import NavBar from './components/Header/NavBar';
 import HeroSection from './components/Sections/HeroSection';
 import CardSection from './components/Sections/CardSection';
 import axios from 'axios';
+import ReduxWrapper from './components/Wrapper/ReduxWrapper';
 
 const getImages = async () => {
   try {
@@ -23,7 +23,9 @@ export default async function Home() {
   //const images = await getImages();
   return (
     <>
-      <NavBar />
+      <ReduxWrapper>
+        <NavBar />
+      </ReduxWrapper>
       <HeroSection
         heading="Welcome to Kitty Paradise!"
         subheading="Where fluffy tails and purrs make everything better."

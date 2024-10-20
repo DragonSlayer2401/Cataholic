@@ -17,7 +17,7 @@ const getImages = async () => {
   }
 };
 export default async function Home() {
-  const images = await getImages();
+  //const images = await getImages();
   return (
     <>
       <NavBar />

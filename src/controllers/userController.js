@@ -21,11 +21,11 @@ export const findUserById = async (userId) => {
 };
 
 // Finds a user by username
-export const findUserByUsername = async (username) => {
+export const findUserByEmail = async (email) => {
   await dbConnect();
 
   try {
-    const foundUser = await User.findOne({ username });
+    const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
       return null;
@@ -33,7 +33,7 @@ export const findUserByUsername = async (username) => {
 
     return foundUser;
   } catch (error) {
-    throw new Error(`Error finding user by username: ${error.message}`);
+    throw new Error(`Error finding user by email: ${error.message}`);
   }
 };
 
@@ -132,7 +132,7 @@ export const generateJWT = (user) => {
   try {
     const signedJWT = jwt.sign(
       {
-        data: { id: user.id, username: user.username },
+        data: { id: user.id, email: user.email },
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }

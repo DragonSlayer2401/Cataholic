@@ -1,20 +1,20 @@
 import {
   createUser,
-  findUserByUsername,
+  findUserByEmail,
   hashPassword,
 } from '@/controllers/userController';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   const body = await req.json();
-  const { username, password } = body;
-  // Check if a user already exists by the supplied username
-  const foundUser = await findUserByUsername(username.toLowerCase());
+  const { email, password } = body;
+   // Check if a user already exists by the supplied email
+  const foundUser = await findUserByEmail(email.toLowerCase());
 
   if (!foundUser) {
     const hashedPassword = await hashPassword(password);
     const createdUser = await createUser({
-      username: username.toLowerCase(),
+      email: email.toLowerCase(),
       password: hashedPassword,
     });
 
@@ -31,6 +31,6 @@ export async function POST(req) {
     );
   }
 
-  // Username is already taken
-  return NextResponse.json({ message: 'Username is taken' }, { status: 409 });
+  // Email is already taken
+  return NextResponse.json({ message: 'email is already in use' }, { status: 409 });
 }

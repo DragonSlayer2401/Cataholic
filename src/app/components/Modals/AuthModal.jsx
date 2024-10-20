@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { Modal, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
 import { Nunito, Chewy } from 'next/font/google';
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 import './modal.css';
-import { useState } from 'react';
+import { set } from 'mongoose';
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -18,8 +21,10 @@ const chewy = Chewy({
 });
 
 const AuthModal = ({ show, setShow, title, type }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
 
   const {
     register,
@@ -34,12 +39,72 @@ const AuthModal = ({ show, setShow, title, type }) => {
   const passwordRequirements = {
     length: password?.length >= 8,
     uppercase: /[A-Z]/.test(password),
-    lowercase: /[a-z]/.test(password),
+    lowercase: /[a-z]/.test(password || ''),
     number: /\d/.test(password),
   };
 
+  const signupUser = async (data) => {
+    try {
+      const response = await axios.post(`/api/users/auth/signup`, {
+        email: data.email,
+        password: data.password,
+      });
+
+      if (response.status === 201) {
+        await loginUser(data);
+      }
+    } catch (error) {
+      if (error.response.status === 409) {
+        toast.error('Email is already in use', {
+          theme: 'colored',
+        });
+      } else {
+        toast.error('Signup failed. Please try again later.', {
+          theme: 'colored',
+        });
+      }
+    }
+  };
+
+  const loginUser = async (data) => {
+    try {
+      const response = await axios.post(`/api/users/auth/login`, {
+        email: data.email,
+        password: data.password,
+      });
+
+      if (response.status === 200) {
+        toast.success('Login successful', {
+          theme: 'colored',
+        });
+
+        localStorage.setItem('token', response.data.token);
+
+        setTimeout(() => {
+          setShow(false);
+        }, 5500);
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        toast.error('Invalid credentials', {
+          theme: 'colored',
+        });
+      } else {
+        toast.error('Login failed. Please try again later.', {
+          theme: 'colored',
+        });
+      }
+    }
+  };
+
   const onSubmit = async (data) => {
-    console.log(data);
+    // clears the form after submission
+    reset();
+    if (type === 'login') {
+      await loginUser(data);
+    } else {
+      await signupUser(data);
+    }
   };
 
   return (
@@ -101,7 +166,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
             </Form.Label>
             <div className="password-container flex items-center border">
               <Form.Control
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword.password ? 'text' : 'password'}
                 id="password"
                 name="password"
                 placeholder="Enter your password"
@@ -115,7 +180,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
                     message: 'Password must be at least 8 characters',
                   },
                   pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
                     message:
                       'Password must be at least 8 characters, include at least one uppercase and lowercase letter, and at least one number',
                   },
@@ -123,11 +188,18 @@ const AuthModal = ({ show, setShow, title, type }) => {
               />
               <button
                 type="button"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword.password ? 'Hide password' : 'Show password'
+                }
+                onClick={() =>
+                  setShowPassword({
+                    ...showPassword,
+                    password: !showPassword.password,
+                  })
+                }
                 className="password-toggle mr-1"
               >
-                {showPassword ? (
+                {showPassword.password ? (
                   <FaEye className="password-visible" />
                 ) : (
                   <PiEyeClosedBold className="password-hidden" />
@@ -192,7 +264,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
               </Form.Label>
               <div className="password-container flex items-center border">
                 <Form.Control
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword.confirmPassword ? 'text' : 'password'}
                   id="confirm-password"
                   name="confirmPassword"
                   placeholder="Enter your password"
@@ -207,12 +279,19 @@ const AuthModal = ({ show, setShow, title, type }) => {
                 <button
                   type="button"
                   aria-label={
-                    showConfirmPassword ? 'Hide password' : 'Show password'
+                    showPassword.confirmPassword
+                      ? 'Hide password'
+                      : 'Show password'
                   }
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() =>
+                    setShowPassword({
+                      ...showPassword,
+                      confirmPassword: !showPassword.confirmPassword,
+                    })
+                  }
                   className="password-toggle mr-1"
                 >
-                  {showConfirmPassword ? (
+                  {showPassword.confirmPassword ? (
                     <FaEye className="password-visible" />
                   ) : (
                     <PiEyeClosedBold className="password-hidden" />
@@ -240,6 +319,16 @@ const AuthModal = ({ show, setShow, title, type }) => {
           </button>
         </Modal.Footer>
       </Form>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        pauseOnFocusLoss
+        role="alert"
+        aria-live="assertive"
+      />
     </Modal>
   );
 };

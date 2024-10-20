@@ -1,5 +1,5 @@
 import {
-  findUserByUsername,
+  findUserByEmail,
   generateJWT,
   verifyPassword,
 } from '@/controllers/userController';
@@ -7,10 +7,10 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   const body = await req.json();
-  const { username, password } = body;
+  const { email, password } = body;
 
   try {
-    const foundUser = await findUserByUsername(username.toLowerCase());
+    const foundUser = await findUserByEmail(email.toLowerCase());
 
     if (!foundUser) {
       return NextResponse.json({ message: 'User Not Found' }, { status: 404 });
@@ -20,7 +20,7 @@ export async function POST(req) {
     if (success) {
       const jwt = generateJWT({
         id: foundUser._id,
-        username: foundUser.username,
+        email: foundUser.email,
       });
 
       return NextResponse.json(

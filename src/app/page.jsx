@@ -2,9 +2,9 @@ import NavBar from './components/Header/NavBar';
 import HeroSection from './components/Sections/HeroSection';
 import CardSection from './components/Sections/CardSection';
 import ReduxWrapper from './components/Wrapper/ReduxWrapper';
-import axios from 'axios';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
-import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
+
 
 const getImages = async () => {
   try {

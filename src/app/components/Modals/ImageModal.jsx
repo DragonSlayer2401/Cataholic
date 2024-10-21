@@ -2,6 +2,7 @@ import { FaRegHeart, FaHeart } from 'react-icons/fa6';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import './modal.css';
 import { Nunito } from 'next/font/google';
+import { useDispatch, useSelector } from 'react-redux';
 
 const nunito = Nunito({
   weights: [700],

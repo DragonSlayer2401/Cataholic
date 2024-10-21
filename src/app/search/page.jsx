@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 import NavBar from '../components/Header/NavBar';
 import CardSection from '../components/Sections/CardSection';
 import HeroSection from '../components/Sections/HeroSection';

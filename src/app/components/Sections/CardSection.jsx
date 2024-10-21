@@ -88,43 +88,43 @@ const CardSection = ({ title, initialImages, breeds }) => {
   }, [page, hasMoreImages]);
 
   // Create the observer to load more images when the loading spinner is visible
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Display more images when the spinner is visible
-        if (entries[0].isIntersecting && !loading && hasMoreImages) {
-          setVisibleImages((prev) => prev + 12);
-        }
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       // Display more images when the spinner is visible
+  //       if (entries[0].isIntersecting && !loading && hasMoreImages) {
+  //         setVisibleImages((prev) => prev + 12);
+  //       }
 
-        // Fetch more images when all images are visible
-        if (visibleImages >= images.length && !loading && hasMoreImages) {
-          setPage((prev) => prev + 1);
-        }
-      },
-      {
-        root: null, // observe spinner relative to the viewport
-        rootMargin: '0px', // trigger when the spinner is visible
-        threshold: 0.0, // trigger when any part of the spinner is visible
-      }
-    );
+  //       // Fetch more images when all images are visible
+  //       if (visibleImages >= images.length && !loading && hasMoreImages) {
+  //         setPage((prev) => prev + 1);
+  //       }
+  //     },
+  //     {
+  //       root: null, // observe spinner relative to the viewport
+  //       rootMargin: '0px', // trigger when the spinner is visible
+  //       threshold: 0.0, // trigger when any part of the spinner is visible
+  //     }
+  //   );
 
-    // If loadMoreRef is not null, start observing the spinner
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
+  //   // If loadMoreRef is not null, start observing the spinner
+  //   if (loadMoreRef.current) {
+  //     observer.observe(loadMoreRef.current);
+  //   }
 
-    // remove observer when the component is unmounted
-    return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
-    };
-  }, [
-    loading,
-    hasMoreImages,
-    images.length,
-    visibleImages,
-  ]);
+  //   // remove observer when the component is unmounted
+  //   return () => {
+  //     if (loadMoreRef.current) {
+  //       observer.unobserve(loadMoreRef.current);
+  //     }
+  //   };
+  // }, [
+  //   loading,
+  //   hasMoreImages,
+  //   images.length,
+  //   visibleImages,
+  // ]);
 
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">

@@ -1,18 +1,30 @@
+/* =========================
+   Navbar Styles
+   ========================= */
+
+/* Main Navbar container */
 .navbar {
   background: #ffb6c1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Navbar brand and navigation links styling */
 .nav-link,
 .navbar-brand {
   color: #ffffff;
   transition: color 0.3s ease;
 }
 
+/* Navbar toggle icon styling */
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
+/* =========================
+   Hover, Active, and Focus States
+   ========================= */
+
+/* Hover and active states for links and brand */
 .nav-link:hover,
 .navbar-brand:hover,
 .nav-link:active,
@@ -24,11 +36,13 @@
   color: #a971a9 !important;
 }
 
+/* Focus state for navigation links and brand */
 .nav-link:focus,
 .navbar-brand:focus {
   color: white !important;
 }
 
+/* Visible focus and search bar focus-within state */
 .nav-link:focus-visible,
 .navbar-brand:focus-visible,
 #search-bar:focus-within {
@@ -37,10 +51,16 @@
   box-shadow: none !important;
 }
 
+/* =========================
+   Search Bar Styles
+   ========================= */
+
+/* Container for the search bar */
 #search-bar {
   width: 263.33px;
 }
 
+/* Remove default outline on search bar input focus */
 #search-bar input:focus {
   outline: none;
 }

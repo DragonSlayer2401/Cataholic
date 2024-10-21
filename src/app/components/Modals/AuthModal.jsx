@@ -5,7 +5,7 @@ import { MdCancel, MdCheckCircle } from 'react-icons/md';
 import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
 import { Nunito, Chewy } from 'next/font/google';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import './modal.css';
 import { useDispatch } from 'react-redux';
@@ -63,9 +63,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
 
         dispatch(setLoggedIn(true));
 
-        setTimeout(() => {
-          setShow(false);
-        }, 2000);
+        setShow(false);
       }
     } catch (error) {
       console.error(error);
@@ -326,16 +324,6 @@ const AuthModal = ({ show, setShow, title, type }) => {
           </button>
         </Modal.Footer>
       </Form>
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        newestOnTop={true}
-        closeOnClick
-        pauseOnHover
-        pauseOnFocusLoss
-        role="alert"
-        aria-live="assertive"
-      />
     </Modal>
   );
 };

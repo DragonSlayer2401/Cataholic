@@ -1,12 +1,10 @@
 'use client';
-import ReduxProvider from "../Provider/ReduxProvider";
+import initializeStore from '@/app/redux/store';
+import { Provider } from 'react-redux';
 
-const ReduxWrapper = ({children}) => {
-    return (
-        <ReduxProvider>
-            {children}
-        </ReduxProvider>
-    )
-}
- 
+const ReduxWrapper = ({ children, preloadedState }) => {
+    const reduxStore = initializeStore(preloadedState);
+  return <Provider store={reduxStore}>{children}</Provider>;
+};
+
 export default ReduxWrapper;

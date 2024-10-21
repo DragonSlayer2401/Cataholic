@@ -2,10 +2,10 @@ import jwt from "jsonwebtoken";
 
 export const withAuth = (handler) => {
   return async (req) => {
-    // Extracts the token from the Authorization header
-    const authHeader = req.headers.get('Authorization');
-    // Check if the Authorization header is present and get the token
-    const token = authHeader && authHeader.split(' ')[1];
+    // Extracts all cookies from cookie header
+    const cookieHeader = req.headers.get('cookie');
+    // Extracts token from cookies
+    const token = cookieHeader?.split('; ').find((cookie) => cookie.startsWith('token='))?.split('=')[1];
 
     if (!token) {
       return new Response(
@@ -17,7 +17,7 @@ export const withAuth = (handler) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       // Adds the user to the request object
-      req.user = { username: decoded.data.username, id: decoded.data.id };
+      req.user = { email: decoded.data.email, id: decoded.data.id };
       // Proceeds to the route handler
       return handler(req);
     } catch (error) {

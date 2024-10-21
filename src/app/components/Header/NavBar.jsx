@@ -4,9 +4,11 @@ import SearchBar from './SearchBar';
 import './header.css';
 import { Nunito } from 'next/font/google';
 import AuthModal from '../Modals/AuthModal';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../../redux/authSlice';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -20,17 +22,17 @@ const NavBar = () => {
   const loggedIn = useSelector((state) => state.auth.loggedIn);
   const dispatch = useDispatch();
 
-
-  useEffect(() => { 
-    const token = localStorage.getItem('token');
-    if (token) {
-      dispatch(setLoggedIn(true));
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
+  const handleLogout = async () => {
     dispatch(setLoggedIn(false));
+    const response = await axios.get('/api/users/auth/logout', {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      toast.success('Logout successful', {
+        theme: 'colored',
+      });
+    }
   };
 
   const handleAuthModal = (title, type) => {

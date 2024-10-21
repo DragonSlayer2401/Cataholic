@@ -3,6 +3,7 @@ import {
   generateJWT,
   verifyPassword,
 } from '@/controllers/userController';
+import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -23,10 +24,22 @@ export async function POST(req) {
         email: foundUser.email,
       });
 
-      return NextResponse.json(
-        { message: 'Login Successful', token: jwt },
+      const cookie = serialize('token', jwt, {
+        httpOnly: true, // Makes the cookie only accessible by the server
+        secure: process.env.NODE_ENV === 'production', // Makes the cookie only available over HTTPS in production
+        sameSite: 'strict', // Makes the cookie only available for the same site
+        maxAge: 60 * 60 * 24 * 7, // Sets the cookie to expire in 7 days
+        path: '/', // Makes the cookie available to all routes
+      })
+
+      const response = NextResponse.json(
+        { message: 'Login Successful' },
         { status: 200 }
       );
+
+      response.headers.set('Set-Cookie', cookie);
+
+      return response;
     }
 
     return NextResponse.json(
@@ -34,6 +47,7 @@ export async function POST(req) {
       { status: 401 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ message: `${error.message}` }, { status: 500 });
   }
 }

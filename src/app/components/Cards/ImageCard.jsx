@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import './card.css';
 
 const ImageCard = ({ src, alt, id, width, height, imageLoadHandler, sendImage }) => {
-  {console.log(src)}
   return (
     <motion.div
       className="image-card cursor-pointer"

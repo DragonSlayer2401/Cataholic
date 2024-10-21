@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 
+// Stores the Redux store to prevent multiple instances
 let store;
 
 const initializeStore = (preloadedState) => {

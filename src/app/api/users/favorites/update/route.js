@@ -6,6 +6,7 @@ export const PUT = withAuth(async (req) => {
   const body = await req.json();
   const { favorites } = body;
   const user = req.user;
+
   const updatedUser = await updateFavorites(user.id, favorites);
 
   if (updatedUser) {

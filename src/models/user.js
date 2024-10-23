@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
     favorites: [
       {
         id: { type: String, required: true, index: true },
+        alt: { type: String, required: true },
         src: { type: String, required: true },
       },
     ],

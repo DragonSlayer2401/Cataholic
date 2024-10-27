@@ -17,7 +17,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
   const [images, setImages] = useState(initialImages);
   // Store the current page number
   const [page, setPage] = useState(0);
-  // Store whether or not images ae being fetched
+  // Store whether or not images are being fetched
   const [loading, setLoading] = useState(false);
   // Store whether or not there are more images to fetch
   const [hasMoreImages, setHasMoreImages] = useState(true);
@@ -31,8 +31,16 @@ const CardSection = ({ title, initialImages, breeds }) => {
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
   const [imageData, setImageData] = useState({ src: '', alt: '', id: '' });
+  // Reference to the observer
+  const observerRef = useRef(null);
   // Reference to the load more spinner
   const loadMoreRef = useRef(null);
+
+  // Create references to the states to use inside of the observer to overcome stale closures
+  const loadingRef = useRef(loading);
+  const hasMoreImagesRef = useRef(hasMoreImages);
+  const visibleImagesRef = useRef(visibleImages);
+  const imagesLengthRef = useRef(images.length);
 
   const getImages = async () => {
     setLoading(true);
@@ -80,6 +88,14 @@ const CardSection = ({ title, initialImages, breeds }) => {
     });
   };
 
+  // Update the references when the states change
+  useEffect(() => {
+    loadingRef.current = loading;
+    hasMoreImagesRef.current = hasMoreImages;
+    visibleImagesRef.current = visibleImages;
+    imagesLengthRef.current = images.length;
+  }, [loading, hasMoreImages, visibleImages, images.length]);
+
   // Fetch images when the component is mounted or page changes
   useEffect(() => {
     if (hasMoreImages && page > 0) {
@@ -88,43 +104,54 @@ const CardSection = ({ title, initialImages, breeds }) => {
   }, [page, hasMoreImages]);
 
   // Create the observer to load more images when the loading spinner is visible
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       // Display more images when the spinner is visible
-  //       if (entries[0].isIntersecting && !loading && hasMoreImages) {
-  //         setVisibleImages((prev) => prev + 12);
-  //       }
+  useEffect(() => {
+    // 5 seconds
+    const animationDuration = 5100;
+    const timer = setTimeout(() => {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          // Display more images when the spinner is visible
+          if (
+            entries[0].isIntersecting &&
+            !loadingRef.current &&
+            hasMoreImagesRef.current
+          ) {
+            setVisibleImages((prev) => prev + 12);
+          }
 
-  //       // Fetch more images when all images are visible
-  //       if (visibleImages >= images.length && !loading && hasMoreImages) {
-  //         setPage((prev) => prev + 1);
-  //       }
-  //     },
-  //     {
-  //       root: null, // observe spinner relative to the viewport
-  //       rootMargin: '0px', // trigger when the spinner is visible
-  //       threshold: 0.0, // trigger when any part of the spinner is visible
-  //     }
-  //   );
+          // Fetch more images when all images are visible
+          if (
+            visibleImagesRef.current >= imagesLengthRef.current &&
+            !loadingRef.current &&
+            hasMoreImagesRef.current
+          ) {
+            setPage((prev) => prev + 1);
+          }
+        },
+        {
+          root: null, // observe spinner relative to the viewport
+          rootMargin: '0px', // trigger when the spinner is visible
+          threshold: 0.0, // trigger when any part of the spinner is visible
+        }
+      );
 
-  //   // If loadMoreRef is not null, start observing the spinner
-  //   if (loadMoreRef.current) {
-  //     observer.observe(loadMoreRef.current);
-  //   }
+      console.log(loadMoreRef.current)
 
-  //   // remove observer when the component is unmounted
-  //   return () => {
-  //     if (loadMoreRef.current) {
-  //       observer.unobserve(loadMoreRef.current);
-  //     }
-  //   };
-  // }, [
-  //   loading,
-  //   hasMoreImages,
-  //   images.length,
-  //   visibleImages,
-  // ]);
+      // If loadMoreRef is not null, start observing the spinner
+      if (loadMoreRef.current) {
+        observerRef.current.observe(loadMoreRef.current);
+      }
+    }, animationDuration);
+
+    return () => {
+      // clears the timer if the component is unmounted before the observer is created
+      clearTimeout(timer);
+      // removes the observer when the component is unmounted
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
 
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
@@ -150,6 +177,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
                 width={image.width}
                 height={image.height}
                 sendImage={sendImage}
+                length={images.length}
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (

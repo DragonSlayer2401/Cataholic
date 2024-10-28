@@ -1,9 +1,10 @@
 'use client';
 import { Nunito } from 'next/font/google';
 import './section.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ImageModal from '../Modals/ImageModal';
 import ImageCard from '../Cards/ImageCard';
+import { useSelector } from 'react-redux';
 
 const nunito = Nunito({
   weights: [700],
@@ -23,6 +24,8 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
   const [imageData, setImageData] = useState({ src: '', alt: '', id: '' });
+  // Get the favorites from the Redux store
+  const favorites = useSelector((state) => state.auth.favorites);
 
   // Set image data to be showed in Modal
   const sendImage = (src, alt, id) => {
@@ -38,6 +41,12 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
       return newLoadStates;
     });
   };
+
+  // Update the images when the favorites change
+  useEffect(() => {
+    setImages(favorites);
+    setVisibleImages(favorites.length);
+  }, [favorites]);
 
   return (
     <section className="card-section pt-[156px] pb-[60px]  flex flex-col justify-center items-center">

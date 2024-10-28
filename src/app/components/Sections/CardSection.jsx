@@ -105,47 +105,39 @@ const CardSection = ({ title, initialImages, breeds }) => {
 
   // Create the observer to load more images when the loading spinner is visible
   useEffect(() => {
-    // 5 seconds
-    const animationDuration = 5100;
-    const timer = setTimeout(() => {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          // Display more images when the spinner is visible
-          if (
-            entries[0].isIntersecting &&
-            !loadingRef.current &&
-            hasMoreImagesRef.current
-          ) {
-            setVisibleImages((prev) => prev + 12);
-          }
-
-          // Fetch more images when all images are visible
-          if (
-            visibleImagesRef.current >= imagesLengthRef.current &&
-            !loadingRef.current &&
-            hasMoreImagesRef.current
-          ) {
-            setPage((prev) => prev + 1);
-          }
-        },
-        {
-          root: null, // observe spinner relative to the viewport
-          rootMargin: '0px', // trigger when the spinner is visible
-          threshold: 0.0, // trigger when any part of the spinner is visible
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        // Display more images when the spinner is visible
+        if (
+          entries[0].isIntersecting &&
+          !loadingRef.current &&
+          hasMoreImagesRef.current
+        ) {
+          setVisibleImages((prev) => prev + 12);
         }
-      );
 
-      console.log(loadMoreRef.current)
-
-      // If loadMoreRef is not null, start observing the spinner
-      if (loadMoreRef.current) {
-        observerRef.current.observe(loadMoreRef.current);
+        // Fetch more images when all images are visible
+        if (
+          visibleImagesRef.current >= imagesLengthRef.current &&
+          !loadingRef.current &&
+          hasMoreImagesRef.current
+        ) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      {
+        root: null, // observe spinner relative to the viewport
+        rootMargin: '0px', // trigger when the spinner is visible
+        threshold: 0.0, // trigger when any part of the spinner is visible
       }
-    }, animationDuration);
+    );
+
+    // If loadMoreRef is not null, start observing the spinner
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current);
+    }
 
     return () => {
-      // clears the timer if the component is unmounted before the observer is created
-      clearTimeout(timer);
       // removes the observer when the component is unmounted
       if (observerRef.current) {
         observerRef.current.disconnect();
@@ -185,9 +177,9 @@ const CardSection = ({ title, initialImages, breeds }) => {
             )
           )}
       </div>
-      {hasMoreImages && (
-        <Spinner animation="border" role="status" ref={loadMoreRef} />
-      )}
+      {hasMoreImages && <div ref={loadMoreRef} style={{height: '5px'}}>
+          <Spinner animation="border" role="status" />
+      </div>}
       <ImageModal imageData={imageData} show={show} setShow={setShow} />
     </section>
   );

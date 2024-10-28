@@ -5,10 +5,12 @@ import './header.css';
 import { Nunito } from 'next/font/google';
 import AuthModal from '../Modals/AuthModal';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../../redux/authSlice';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -21,6 +23,7 @@ const NavBar = () => {
   const [modalData, setModalData] = useState({ title: '', type: '' });
   const loggedIn = useSelector((state) => state.auth.loggedIn);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleLogout = async () => {
     dispatch(setLoggedIn(false));
@@ -32,6 +35,8 @@ const NavBar = () => {
       toast.success('Logout successful', {
         theme: 'colored',
       });
+
+     router.push('/');
     }
   };
 
@@ -62,6 +67,7 @@ const NavBar = () => {
               <>
                 <Nav.Link
                   href="/favorites"
+                  key="favorites-link"
                   className={`font-bold ${nunito.className}`}
                 >
                   Favorites

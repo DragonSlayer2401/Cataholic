@@ -17,9 +17,7 @@ const ImageModal = ({ imageData, show, setShow }) => {
   const favorites = useSelector((state) => state.auth.favorites);
   const dispatch = useDispatch();
   // Check if the image is a favorite
-  const [isFavorite, setIsFavorite] = useState(
-    favorites.some((favorite) => favorite.id === imageData.id)
-  );
+  const [isFavorite, setIsFavorite] = useState(false);
   // Tracks if the component is mounted
   const isMountedRef = useRef(true);
 
@@ -51,7 +49,9 @@ const ImageModal = ({ imageData, show, setShow }) => {
     if (loggedIn && !isMountedRef.current) {
       updateFavorites();
     }
-  }, [favorites]);
+
+    setIsFavorite(favorites.some((favorite) => favorite.id === imageData.id));
+  }, [favorites, imageData]);
 
   return (
     <Modal

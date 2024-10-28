@@ -19,5 +19,5 @@
 .hero-section h2,
 .card-section h2,
 .card-section .spinner-border {
-  color: #a971a9;
+  color: #a971a9 !important;
 }

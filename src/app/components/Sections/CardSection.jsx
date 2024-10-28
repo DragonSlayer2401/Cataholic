@@ -166,8 +166,6 @@ const CardSection = ({ title, initialImages, breeds }) => {
                     : 'unknown breed cat'
                 }
                 id={image.id}
-                width={image.width}
-                height={image.height}
                 sendImage={sendImage}
                 length={images.length}
                 imageLoadHandler={() => handleImageLoad(index)}

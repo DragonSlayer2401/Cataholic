@@ -4,11 +4,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     loggedIn: false,
+    email: '',
     favorites: [],
   },
   reducers: {
     setLoggedIn: (state, action) => {
       state.loggedIn = action.payload;
+    },
+    setEmail: (state, action) => {
+      state.email = action.payload
     },
     setFavorites: (state, action) => {
       state.favorites = action.payload;
@@ -24,5 +28,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setLoggedIn, setFavorites, addFavorite, removeFavorite } = authSlice.actions;
+export const { setLoggedIn, setEmail, setFavorites, addFavorite, removeFavorite } = authSlice.actions;
 export default authSlice.reducer;

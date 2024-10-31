@@ -26,6 +26,8 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     dispatch(setLoggedIn(false));
+    dispatch(setFavorites([]));
+    dispatch(setEmail(''));
     const response = await axios.get('/api/users/auth/logout', {
       withCredentials: true,
     });

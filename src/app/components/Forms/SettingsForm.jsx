@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
 import './form.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -13,6 +14,9 @@ const nunito = Nunito({
 });
 
 const SettingsForm = () => {
+  const currentEmail = useSelector((state) => state.auth.email);
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -40,7 +44,7 @@ const SettingsForm = () => {
               id="current-email"
               name="currentemail"
               readOnly
-              value="User email"
+              value={currentEmail}
               disabled
               className={`text-base p-3 border cursor-not-allowed ${nunito.className}`}
             />

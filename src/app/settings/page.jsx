@@ -4,6 +4,14 @@ import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
 import { redirect } from 'next/navigation';
 import FormSection from '../components/Sections/FormSection';
 import GeneralSection from '../components/Sections/GeneralSection';
+import { Form, FormGroup, FormLabel } from 'react-bootstrap';
+import { Nunito } from 'next/font/google';
+import SettingsForm from '../components/Forms/SettingsForm';
+
+const nunito = Nunito({
+  weights: [700, 600, 400],
+  subsets: ['latin'],
+});
 
 export default async function Settings() {
   const preloadedState = await getReduxInitialState();
@@ -19,9 +27,7 @@ export default async function Settings() {
       </ReduxWrapper>
       <main>
         <GeneralSection title="Account Settings">
-          <FormSection title="Change Email" type="input" />
-          <FormSection title="Change Password" type="input" />
-          <FormSection title="Delete Account" type="button" />
+          <SettingsForm />
         </GeneralSection>
       </main>
     </>

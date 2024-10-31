@@ -8,13 +8,13 @@ const nunito = Nunito({
 
 const GeneralSection = ({ children, title }) => {
   return (
-    <section className="general-section pt-[198px] flex flex-col justify-center items-center">
+    <section className="general-section pt-[198px]">
       <h2
         className={`text-center font-bold mb-10 text-[28px] sm:text-4xl ${nunito.className}`}
       >
         {title}
       </h2>
-      {children}
+      <div className='max-w-[800px] mx-auto'>{children}</div>
     </section>
   );
 };

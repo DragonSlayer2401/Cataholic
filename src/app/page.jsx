@@ -5,7 +5,6 @@ import ReduxWrapper from './components/Wrapper/ReduxWrapper';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 import axios from 'axios';
 
-
 const getImages = async () => {
   try {
     // number of images to fetch
@@ -30,13 +29,15 @@ export default async function Home() {
       <ReduxWrapper preloadedState={preloadedState}>
         <NavBar />
       </ReduxWrapper>
-      <HeroSection
-        heading="Welcome to Kitty Paradise!"
-        subheading="Where fluffy tails and purrs make everything better."
-      />
-      <ReduxWrapper preloadedState={preloadedState}>
-        <CardSection title="Our Adorable Cats" initialImages={images} />
-      </ReduxWrapper>
+      <main>
+        <HeroSection
+          heading="Welcome to Kitty Paradise!"
+          subheading="Where fluffy tails and purrs make everything better."
+        />
+        <ReduxWrapper preloadedState={preloadedState}>
+          <CardSection title="Our Adorable Cats" initialImages={images} />
+        </ReduxWrapper>
+      </main>
     </>
   );
 }

@@ -49,7 +49,7 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
   }, [favorites]);
 
   return (
-    <section className="card-section pt-[156px] pb-[60px]  flex flex-col justify-center items-center">
+    <section className="card-section pt-[198px] pb-[60px]  flex flex-col justify-center items-center">
       <h2
         className={`text-center font-bold mb-10 text-[28px] sm:text-4xl  ${nunito.className}`}
       >

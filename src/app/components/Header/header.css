@@ -26,7 +26,6 @@
 
 /* Hover and active states for links and brand */
 .nav-link:hover,
-.navbar-brand:hover,
 .nav-link:active,
 .nav-link.show,
 #search-bar input,
@@ -38,7 +37,7 @@
 
 /* Focus state for navigation links and brand */
 .nav-link:focus,
-.navbar-brand:focus {
+.navbar-brand svg:focus {
   color: white !important;
 }
 
@@ -49,6 +48,10 @@
   outline: 2px solid #a971a9 !important;
   color: #a971a9 !important;
   box-shadow: none !important;
+}
+
+.navbar-brand:focus-visible .cls-1 {
+  fill: #a971a9 !important;
 }
 
 /* =========================
@@ -63,4 +66,14 @@
 /* Remove default outline on search bar input focus */
 #search-bar input:focus {
   outline: none;
+}
+
+.navbar-brand .cls-1 {
+  fill: #ffffff !important;
+  stroke-width: 0px !important;
+  transition: fill 0.3s ease;
+}
+
+.navbar-brand:hover .cls-1 {
+  fill: #a971a9 !important;
 }

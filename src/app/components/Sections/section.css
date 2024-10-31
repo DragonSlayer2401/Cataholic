@@ -6,7 +6,7 @@
 .hero-section {
   background: linear-gradient(to bottom, #e6e6fa, #bde0fe);
   width: 100vw;
-  padding-top: 96px;
+  padding-top: 138px;
   height: 500px;
 }
 
@@ -18,6 +18,7 @@
 .hero-section h1,
 .hero-section h2,
 .card-section h2,
+.general-section h2,
 .card-section .spinner-border {
   color: #a971a9 !important;
 }

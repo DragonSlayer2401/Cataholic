@@ -7,6 +7,7 @@ import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
 import './form.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -16,22 +17,46 @@ const nunito = Nunito({
 const SettingsForm = () => {
   const currentEmail = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+    currentPassword: false,
+  });
+
+  const emailForm = useForm()
+  const passwordForm = useForm()
 
   const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors, isSubmitting },
+    register: registerEmail,
+    handleSubmit: handleSubmitEmail,
+    watch: watchEmail,
+    reset: resetEmail,
+    formState: { errors: errorsEmail},
   } = useForm();
 
-  const password = watch('password');
-  const email = watch('email');
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    watch: watchPassword,
+    reset: resetPassword,
+    formState: { errors: errorsPassword},
+  } = useForm();
+
+  const password = watchPassword('password');
+  const email = watchEmail('email');
+
+  const onSubmitEmail = async (data) => {
+    resetEmail();
+  }
+
+  const onSubmitPassword = async (data) => {
+    resetPassword();
+  }
 
   return (
     <div id="settings-form">
       <FormSection title="Change Email">
-        <Form>
+        <Form method='POST' onSubmit={handleSubmitEmail(onSubmitEmail)}>
           <Form.Group className="mb-4">
             <Form.Label
               htmlFor="current-email"
@@ -61,9 +86,9 @@ const SettingsForm = () => {
               id="email"
               name="email"
               placeholder="Enter your email"
-              aria-invalid={errors.email ? 'true' : 'false'}
+              aria-invalid={errorsEmail.email ? 'true' : 'false'}
               className={`text-base p-3 border ${nunito.className}`}
-              {...register('email', {
+              {...registerEmail('email', {
                 required: 'New Email address is required',
                 pattern: {
                   value:
@@ -72,13 +97,13 @@ const SettingsForm = () => {
                 },
               })}
             />
-            {errors.email && (
+            {errorsEmail.email && (
               <Form.Text
                 aria-live="polite"
                 role="alert"
                 className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
               >
-                {errors.email.message}
+                {errorsEmail.email.message}
               </Form.Text>
             )}
           </Form.Group>
@@ -94,27 +119,28 @@ const SettingsForm = () => {
               id="confirm-email"
               name="confirmEmail"
               placeholder="Enter your email"
-              aria-invalid={errors.confirmEmail ? 'true' : 'false'}
+              aria-invalid={errorsEmail.confirmEmail ? 'true' : 'false'}
               className={`text-base p-3 border ${nunito.className}`}
-              {...register('confirmEmail', {
+              {...registerEmail('confirmEmail', {
                 required: 'Confirm New Email address is required',
                 validate: (value) => value === email || 'Emails do not match',
               })}
             />
-            {errors.confirmEmail && (
+            {errorsEmail.confirmEmail && (
               <Form.Text
                 aria-live="polite"
                 role="alert"
                 className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
               >
-                {errors.confirmEmail.message}
+                {errorsEmail.confirmEmail.message}
               </Form.Text>
             )}
           </Form.Group>
 
           <Form.Group>
             <button
-              className={`text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
+              type='submit'
+              className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Update Email
             </button>
@@ -123,25 +149,175 @@ const SettingsForm = () => {
       </FormSection>
 
       <FormSection title="Change Password">
-        <Form>
+        <Form method='POST' onSubmit={handleSubmitPassword(onSubmitPassword)}>
           <Form.Group className="mb-4">
-            <Form.Label className={`text-base font-bold ${nunito.className}`}>
+            <Form.Label
+              htmlFor="current-password"
+              className={`text-base font-bold ${nunito.className}`}
+            >
               Current Password
             </Form.Label>
+            <div className="password-container flex items-center border">
+              <Form.Control
+                type={showPassword.currentPassword ? 'text' : 'password'}
+                id="current-password"
+                name="currentPassword"
+                placeholder="Enter your password"
+                aria-invalid={errorsPassword.currentPassword ? 'true' : 'false'}
+                className={`text-base p-3 border-none ${nunito.className}`}
+                {...registerPassword('currentPassword', {
+                  required: 'Current Password is required',
+                })}
+              />
+              <button
+                type="button"
+                aria-label={
+                  showPassword.currentPassword
+                    ? 'Hide password'
+                    : 'Show password'
+                }
+                onClick={() =>
+                  setShowPassword({
+                    ...showPassword,
+                    currentPassword: !showPassword.currentPassword,
+                  })
+                }
+                className="password-toggle mr-1"
+              >
+                {showPassword.currentPassword ? (
+                  <FaEye className="password-visible" />
+                ) : (
+                  <PiEyeClosedBold className="password-hidden" />
+                )}
+              </button>
+            </div>
+            {errorsPassword.currentPassword && (
+                <Form.Text
+                  aria-live="polite"
+                  role="alert"
+                  className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
+                >
+                  {errorsPassword.currentPassword.message}
+                </Form.Text>
+              )}
           </Form.Group>
           <Form.Group className="mb-4">
-            <Form.Label className={`text-base font-bold ${nunito.className}`}>
+            <Form.Label
+              htmlFor="password"
+              className={`text-base font-bold ${nunito.className}`}
+            >
               New Password
             </Form.Label>
+            <div className="password-container flex items-center border">
+              <Form.Control
+                autoComplete='off'
+                type={showPassword.password ? 'text' : 'password'}
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                aria-invalid={errorsPassword.password ? 'true' : 'false'}
+                className={`text-base p-3 border-none ${nunito.className}`}
+                {...registerPassword('password', {
+                  required: 'Password is required',
+                  minLength: {
+                    value: 8,
+                    message: 'Password must be at least 8 characters',
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                    message:
+                      'Password must be at least 8 characters, include at least one uppercase and lowercase letter, and at least one number',
+                  },
+                })}
+              />
+              <button
+                type="button"
+                aria-label={
+                  showPassword.password ? 'Hide password' : 'Show password'
+                }
+                onClick={() =>
+                  setShowPassword({
+                    ...showPassword,
+                    password: !showPassword.password,
+                  })
+                }
+                className="password-toggle mr-1"
+              >
+                {showPassword.password ? (
+                  <FaEye className="password-visible" />
+                ) : (
+                  <PiEyeClosedBold className="password-hidden" />
+                )}
+              </button>
+            </div>
+            {errorsPassword.password && (
+                <Form.Text
+                  aria-live="polite"
+                  role="alert"
+                  className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
+                >
+                  {errorsPassword.password.message}
+                </Form.Text>
+              )}
           </Form.Group>
           <Form.Group className="mb-4">
-            <Form.Label className={`text-base font-bold ${nunito.className}`}>
+            <Form.Label
+              htmlFor="confirm-password"
+              className={`text-base font-bold ${nunito.className}`}
+            >
               Confirm New Password
             </Form.Label>
+            <div className="password-container flex items-center border">
+              <Form.Control
+                autoComplete='off'
+                type={showPassword.confirmPassword ? 'text' : 'password'}
+                id="confirm-password"
+                name="confirmPassword"
+                placeholder="Enter your password"
+                aria-invalid={errorsPassword.confirmPassword ? 'true' : 'false'}
+                className={`text-base p-3 border-none ${nunito.className}`}
+                {...registerPassword('confirmPassword', {
+                  required: 'Confirm Password is required',
+                  validate: (value) =>
+                    value === password || 'Passwords do not match',
+                })}
+              />
+              <button
+                type="button"
+                aria-label={
+                  showPassword.confirmPassword
+                    ? 'Hide password'
+                    : 'Show password'
+                }
+                onClick={() =>
+                  setShowPassword({
+                    ...showPassword,
+                    confirmPassword: !showPassword.confirmPassword,
+                  })
+                }
+                className="password-toggle mr-1"
+              >
+                {showPassword.confirmPassword ? (
+                  <FaEye className="password-visible" />
+                ) : (
+                  <PiEyeClosedBold className="password-hidden" />
+                )}
+              </button>
+            </div>
+            {errorsPassword.confirmPassword && (
+              <Form.Text
+                aria-live="polite"
+                role="alert"
+                className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
+              >
+                {errorsPassword.confirmPassword.message}
+              </Form.Text>
+            )}
           </Form.Group>
           <Form.Group className="mb-4">
             <button
-              className={`text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
+              type='submit'
+              className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Update Password
             </button>
@@ -153,7 +329,8 @@ const SettingsForm = () => {
         <Form>
           <Form.Group className="flex flex-col">
             <button
-              className={`text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
+              type='submit'
+              className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Delete Account
             </button>

@@ -7,10 +7,9 @@ import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const body = await req.json();
-  const { email, password } = body;
-
   try {
+    const body = await req.json();
+    const { email, password } = body;
     const foundUser = await findUserByEmail(email.toLowerCase());
 
     if (!foundUser) {
@@ -47,7 +46,6 @@ export async function POST(req) {
       { status: 401 }
     );
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: `${error.message}` }, { status: 500 });
+    return NextResponse.json({ status: 500 });
   }
 }

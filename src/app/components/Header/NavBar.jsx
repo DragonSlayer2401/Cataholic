@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../../redux/authSlice';
+import { setFavorites } from '../../redux/authSlice';
+import { setEmail } from '../../redux/authSlice';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 

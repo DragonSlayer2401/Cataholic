@@ -1,9 +1,9 @@
-#settings-form button {
+#settings-form .submit-button {
   background: #ffb6c1;
   transition: background-color 0.3s ease;
 }
 
-#settings-form button:hover {
+#settings-form .submit-button:hover {
   background: #a971a9;
 }
 
@@ -23,6 +23,10 @@
   border-radius: 8px !important;
 }
 
+#settings-form .password-container {
+  background: #ffffff;
+}
+
 /* Focus state styling for password container and buttons */
 #settings-form .password-container:focus-visible,
 #settings-form button:focus-visible {
@@ -33,4 +37,9 @@
 /* Remove focus shadow for input fields */
 #settings-form input:focus {
   box-shadow: none !important;
+}
+
+#settings-form .password-visible,
+#settings-form .password-hidden {
+  color: #ffb6c1;
 }

@@ -11,7 +11,7 @@ const nunito = Nunito({
 const FormSection = ({ title, children }) => {
   return (
     <section className="form-section mb-10">
-      <h3 className={`font-semibold text-left text-2xl mb-5 ${nunito.className}`}>
+      <h3 className={`font-semibold text-left text-2xl mb-3 ${nunito.className}`}>
         {title}
       </h3>
       {children}

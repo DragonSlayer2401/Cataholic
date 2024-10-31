@@ -1,0 +1,36 @@
+#settings-form button {
+  background: #ffb6c1;
+  transition: background-color 0.3s ease;
+}
+
+#settings-form button:hover {
+  background: #a971a9;
+}
+
+#settings-form label {
+  color: #a971a9;
+}
+
+#settings-form label,
+#settings-form input::placeholder {
+  color: #a971a9 !important;
+}
+
+#settings-form input,
+#settings-form .password-container {
+  color: #a971a9 !important;
+  border-color: #a971a9 !important;
+  border-radius: 8px !important;
+}
+
+/* Focus state styling for password container and buttons */
+#settings-form .password-container:focus-visible,
+#settings-form button:focus-visible {
+  outline: 2px solid #a971a9 !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus shadow for input fields */
+#settings-form input:focus {
+  box-shadow: none !important;
+}

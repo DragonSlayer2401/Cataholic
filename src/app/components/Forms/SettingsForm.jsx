@@ -119,7 +119,7 @@ const SettingsForm = () => {
   };
 
   return (
-    <div id="settings-form">
+    <div id="settings-form" className='px-5'>
       <FormSection title="Change Email">
         <Form method="POST" onSubmit={handleSubmitEmail(onSubmitEmail)}>
           <Form.Group className="mb-4">

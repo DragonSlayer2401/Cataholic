@@ -161,7 +161,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
                 key={image.id}
                 src={image.url}
                 alt={
-                  image.breeds.length > 0
+                  image.breeds?.length > 0
                     ? image.breeds[0].name
                     : 'unknown breed cat'
                 }

@@ -4,6 +4,7 @@ import HeroSection from '../components/Sections/HeroSection';
 import axios from 'axios';
 import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
+import Footer from '../components/Footer/Footer';
 
 const getImages = async (breeds) => {
   try {
@@ -30,17 +31,20 @@ export default async function Search({ searchParams }) {
       <ReduxWrapper preloadedState={preloadedState}>
         <NavBar />
       </ReduxWrapper>
-      <HeroSection
-        heading="Welcome to Kitty Paradise!"
-        subheading="Where fluffy tails and purrs make everything better."
-      />
-      <ReduxWrapper preloadedState={preloadedState}>
-        <CardSection
-          title="Our Adorable Cats"
-          initialImages={images}
-          breeds={breeds}
+      <main>
+        <HeroSection
+          heading="Welcome to Kitty Paradise!"
+          subheading="Where fluffy tails and purrs make everything better."
         />
-      </ReduxWrapper>
+        <ReduxWrapper preloadedState={preloadedState}>
+          <CardSection
+            title="Our Adorable Cats"
+            initialImages={images}
+            breeds={breeds}
+          />
+        </ReduxWrapper>
+      </main>
+      <Footer />
     </>
   );
 }

@@ -34,16 +34,16 @@
    Authentication Modal Styles
    ========================= */
 
-#auth-modal .modal-header .btn-close {
+#auth-modal .modal-header .btn-close, #confirmation-modal .modal-header .btn-close {
   margin: 0;
 }
 
-#auth-modal .modal-content {
+#auth-modal .modal-content, #confirmation-modal .modal-content {
   width: 600px;
   padding: 40px;
 }
 
-#auth-modal .modal-header .modal-title {
+#auth-modal .modal-header .modal-title, #confirmation-modal .modal-header .modal-title {
   color: #ffb6c1;
 }
 
@@ -61,7 +61,7 @@
 
 /* Focus state styling for password container and buttons */
 #auth-modal .password-container:focus-visible,
-#auth-modal button:focus-visible {
+#auth-modal button:focus-visible, #confirmation-modal button:focus-visible {
   outline: 2px solid #a971a9 !important;
   box-shadow: none !important;
 }
@@ -72,13 +72,13 @@
 }
 
 /* Button styles for footer in authentication modal */
-#auth-modal .modal-footer button {
+#auth-modal .modal-footer button, #confirmation-modal .modal-footer button {
   background: #ffb6c1;
   transition: background-color 0.3s ease;
 }
 
 /* Button hover state for footer in authentication modal */
-#auth-modal .modal-footer button:hover {
+#auth-modal .modal-footer button:hover, #confirmation-modal .modal-footer button:hover {
   background: #a971a9;
 }
 

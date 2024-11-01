@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import './form.css';
 import { useRouter } from 'next/navigation';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -21,6 +22,7 @@ const nunito = Nunito({
 const SettingsForm = () => {
   const currentEmail = useSelector((state) => state.auth.email);
   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
@@ -50,7 +52,7 @@ const SettingsForm = () => {
   const password = watchPassword('password');
   const email = watchEmail('email');
 
-  const handleLogout = async () => {
+  const handleLogout = async (type) => {
     dispatch(setLoggedIn(false));
     dispatch(setFavorites([]));
     dispatch(setEmail(''));
@@ -59,11 +61,13 @@ const SettingsForm = () => {
       withCredentials: true,
     });
 
-    if (response.status === 200) {
+    if (response.status === 200 && type !== 'Account deleted') {
       toast.success('Logout successful', {
         theme: 'colored',
       });
 
+      router.push('/');
+    } else if (response.status === 200 && type === 'Account deleted') {
       router.push('/');
     }
   };
@@ -112,14 +116,39 @@ const SettingsForm = () => {
         handleLogout();
       }
     } catch (error) {
-      toast.error('Password change failed. Please try again later.', {
+      if (error.response.status === 401) {
+        toast.error('Invalid current password. Please try again.', {
+          theme: 'colored',
+        });
+      } else {
+        toast.error('Password change failed. Please try again later.', {
+          theme: 'colored',
+        });
+      }
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await axios.delete('/api/users/auth/delete', {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        toast.success('Account deletion successful', {
+          theme: 'colored',
+        });
+        handleLogout('Account deleted');
+      }
+    } catch (error) {
+      toast.error('Account deletion failed. Please try again later.', {
         theme: 'colored',
       });
     }
   };
 
   return (
-    <div id="settings-form" className='px-5'>
+    <div id="settings-form" className="px-5">
       <FormSection title="Change Email">
         <Form method="POST" onSubmit={handleSubmitEmail(onSubmitEmail)}>
           <Form.Group className="mb-4">
@@ -394,7 +423,8 @@ const SettingsForm = () => {
         <Form>
           <Form.Group className="flex flex-col">
             <button
-              type="submit"
+              type="button"
+              onClick={() => setShow(true)}
               className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Delete Account
@@ -402,6 +432,12 @@ const SettingsForm = () => {
           </Form.Group>
         </Form>
       </FormSection>
+      <ConfirmationModal
+        title="Confirm Account Deletion"
+        show={show}
+        setShow={setShow}
+        handleDelete={handleDeleteAccount}
+      />
     </div>
   );
 };

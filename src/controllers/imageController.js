@@ -112,7 +112,7 @@ export const findBreedIds = (breeds) => {
   ]);
 
   const breedIdArray = breeds
-    .map((catBreed) => breedMap.get(catBreed))
+    .map((catBreed) => breedMap.get(catBreed.toLowerCase()))
     .filter((breedId) => breedId !== undefined);
 
   // Will return an empty array if no matching breeds are found

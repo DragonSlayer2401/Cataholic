@@ -2,16 +2,9 @@ import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 import NavBar from '../components/Header/NavBar';
 import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
 import { redirect } from 'next/navigation';
-import FormSection from '../components/Sections/FormSection';
 import GeneralSection from '../components/Sections/GeneralSection';
-import { Form, FormGroup, FormLabel } from 'react-bootstrap';
-import { Nunito } from 'next/font/google';
 import SettingsForm from '../components/Forms/SettingsForm';
-
-const nunito = Nunito({
-  weights: [700, 600, 400],
-  subsets: ['latin'],
-});
+import Footer from '../components/Footer/Footer';
 
 export default async function Settings() {
   const preloadedState = await getReduxInitialState();
@@ -32,6 +25,7 @@ export default async function Settings() {
           </ReduxWrapper>
         </GeneralSection>
       </main>
+      <Footer />
     </>
   );
 }

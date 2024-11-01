@@ -16,16 +16,16 @@ export const findUserById = async (userId) => {
 
     return foundUser;
   } catch (error) {
-    throw new Error(`Error finding user by ID: ${error.message}`);
+    console.error(`Error finding user by ID: ${error.message}`);
   }
 };
 
 // Finds a user by username
-export const findUserByUsername = async (username) => {
+export const findUserByEmail = async (email) => {
   await dbConnect();
 
   try {
-    const foundUser = await User.findOne({ username });
+    const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
       return null;
@@ -33,7 +33,7 @@ export const findUserByUsername = async (username) => {
 
     return foundUser;
   } catch (error) {
-    throw new Error(`Error finding user by username: ${error.message}`);
+    console.error(`Error finding user by email: ${error.message}`);
   }
 };
 
@@ -46,7 +46,7 @@ export const createUser = async (userObj) => {
     const savedUser = await newUser.save();
     return savedUser;
   } catch (error) {
-    throw new Error(`Error creating user: ${error.message}`);
+    console.error(`Error creating user: ${error.message}`);
   }
 };
 
@@ -67,7 +67,7 @@ export const updateUser = async (userId, updateObj) => {
 
     return updatedUser;
   } catch (error) {
-    throw new Error(`Error updating user: ${error.message}`);
+    console.error(`Error updating user: ${error.message}`);
   }
 };
 
@@ -84,7 +84,7 @@ export const deleteUser = async (userId) => {
 
     return deletedUser;
   } catch (error) {
-    throw new Error(`Error deleting user: ${error.message}`);
+    console.error(`Error deleting user: ${error.message}`);
   }
 };
 
@@ -105,7 +105,7 @@ export const updateFavorites = async (userId, favorites) => {
 
     return updatedFavorites;
   } catch (error) {
-    throw new Error(`Error updating favorites: ${error.message}`);
+    console.error(`Error updating favorites: ${error.message}`);
   }
 };
 
@@ -115,7 +115,7 @@ export const hashPassword = async (password) => {
     const hash = await bcrypt.hash(password, salt);
     return hash;
   } catch (error) {
-    throw new Error(`Error hashing password: ${error.message}`);
+    console.error(`Error hashing password: ${error.message}`);
   }
 };
 
@@ -124,7 +124,7 @@ export const verifyPassword = async (password, hashedPassword) => {
     const success = await bcrypt.compare(password, hashedPassword);
     return success;
   } catch (error) {
-    throw new Error(`Error verifying password: ${error.message}`);
+    console.error(`Error verifying password: ${error.message}`);
   }
 };
 
@@ -132,7 +132,7 @@ export const generateJWT = (user) => {
   try {
     const signedJWT = jwt.sign(
       {
-        data: { id: user.id, username: user.username },
+        data: { id: user.id, email: user.email },
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
@@ -140,6 +140,6 @@ export const generateJWT = (user) => {
 
     return signedJWT;
   } catch (error) {
-    throw new Error(`Error generating JWT: ${error.message}`);
+    console.error(`Error generating JWT: ${error.message}`);
   }
 };

@@ -7,29 +7,32 @@ import ImageModal from '../Modals/ImageModal';
 import axios from 'axios';
 import './section.css';
 
-
 const nunito = Nunito({
   weights: [700],
   subsets: ['latin'],
 });
 
-const CardSection = ({ title, initialImages, breeds = [] }) => {
+const CardSection = ({ title, initialImages, breeds }) => {
   // Store the fetched images
   const [images, setImages] = useState(initialImages);
   // Store the current page number
   const [page, setPage] = useState(0);
-  // Store whether or not images ae being fetched
+  // Store whether or not images are being fetched
   const [loading, setLoading] = useState(false);
   // Store whether or not there are more images to fetch
   const [hasMoreImages, setHasMoreImages] = useState(true);
   // Store number of viewable images
   const [visibleImages, setVisibleImages] = useState(12);
   // Store the load state of each image
-  const [imageLoadStates, setImageLoadStates] = useState([]);
+  const [imageLoadStates, setImageLoadStates] = useState([
+    ...new Array(initialImages.length).fill(false),
+  ]);
   // Store the modal show state
   const [show, setShow] = useState(false);
   // Store the image data to be displayed in the modal
   const [imageData, setImageData] = useState({ src: '', alt: '', id: '' });
+  // Reference to the observer
+  const observerRef = useRef(null);
   // Reference to the load more spinner
   const loadMoreRef = useRef(null);
 
@@ -46,7 +49,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
       const limit = 12;
 
       const response =
-        breeds.length > 0
+        breeds && breeds.length > 0
           ? await axios.get(
               `/api/images?limit=${limit}&page=${page}&breeds=${breeds}`
             )
@@ -57,6 +60,10 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
         setHasMoreImages(false);
       } else {
         setImages((prev) => [...prev, ...imageArray]);
+        setImageLoadStates((prev) => [
+          ...prev,
+          ...new Array(imageArray.length).fill(false),
+        ]);
       }
     } catch (error) {
       console.error(error);
@@ -81,13 +88,6 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
     });
   };
 
-  // Fetch images when the component is mounted or page changes
-  useEffect(() => {
-    if (hasMoreImages && page > 0) {
-      getImages();
-    }
-  }, [page, hasMoreImages]);
-
   // Update the references when the states change
   useEffect(() => {
     loadingRef.current = loading;
@@ -96,9 +96,16 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
     imagesLengthRef.current = images.length;
   }, [loading, hasMoreImages, visibleImages, images.length]);
 
+  // Fetch images when the component is mounted or page changes
+  useEffect(() => {
+    if (hasMoreImages && page > 0) {
+      getImages();
+    }
+  }, [page, hasMoreImages]);
+
   // Create the observer to load more images when the loading spinner is visible
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       (entries) => {
         // Display more images when the spinner is visible
         if (
@@ -106,7 +113,7 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
           !loadingRef.current &&
           hasMoreImagesRef.current
         ) {
-          setVisibleImages((prev) => prev + 8);
+          setVisibleImages((prev) => prev + 12);
         }
 
         // Fetch more images when all images are visible
@@ -127,13 +134,13 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
 
     // If loadMoreRef is not null, start observing the spinner
     if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
+      observerRef.current.observe(loadMoreRef.current);
     }
 
-    // remove observer when the component is unmounted
     return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
+      // removes the observer when the component is unmounted
+      if (observerRef.current) {
+        observerRef.current.disconnect();
       }
     };
   }, []);
@@ -154,22 +161,23 @@ const CardSection = ({ title, initialImages, breeds = [] }) => {
                 key={image.id}
                 src={image.url}
                 alt={
-                  console.log(image)
+                  image.breeds.length > 0
+                    ? image.breeds[0].name
+                    : 'unknown breed cat'
                 }
                 id={image.id}
-                width={image.width}
-                height={image.height}
                 sendImage={sendImage}
+                length={images.length}
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (
-                <div key={index}>{console.log(image)}</div>
+              <div key={index}></div>
             )
           )}
       </div>
-      {hasMoreImages && (
-        <Spinner animation="border" role="status" ref={loadMoreRef} />
-      )}
+      {hasMoreImages && <div ref={loadMoreRef} style={{height: '5px'}}>
+          <Spinner animation="border" role="status" />
+      </div>}
       <ImageModal imageData={imageData} show={show} setShow={setShow} />
     </section>
   );

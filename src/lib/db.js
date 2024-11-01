@@ -12,7 +12,7 @@ const dbConnect = async () => {
   }
 
   if (!cachedConnection.promise) {
-    cachedConnection.promise = await mongoose.connect(process.env.MONGODB_URI, {
+    cachedConnection.promise = await mongoose.connect(process.env.MONGO_URI, {
       bufferCommands: false, // Stops commands from being buffered before connecting
     });
   }

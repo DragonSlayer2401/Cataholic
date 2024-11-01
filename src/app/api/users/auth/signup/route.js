@@ -1,36 +1,43 @@
 import {
   createUser,
-  findUserByUsername,
+  findUserByEmail,
   hashPassword,
 } from '@/controllers/userController';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const body = await req.json();
-  const { username, password } = body;
-  // Check if a user already exists by the supplied username
-  const foundUser = await findUserByUsername(username.toLowerCase());
+  try {
+    const body = await req.json();
+    const { email, password } = body;
+    // Check if a user already exists by the supplied email
+    const foundUser = await findUserByEmail(email.toLowerCase());
 
-  if (!foundUser) {
-    const hashedPassword = await hashPassword(password);
-    const createdUser = await createUser({
-      username: username.toLowerCase(),
-      password: hashedPassword,
-    });
+    if (!foundUser) {
+      const hashedPassword = await hashPassword(password);
+      const createdUser = await createUser({
+        email: email.toLowerCase(),
+        password: hashedPassword,
+      });
 
-    if (createdUser) {
+      if (createdUser) {
+        return NextResponse.json(
+          { message: 'User created successfully' },
+          { status: 201 }
+        );
+      }
+
       return NextResponse.json(
-        { message: 'User created successfully' },
-        { status: 201 }
+        { message: 'Failed to create user' },
+        { status: 500 }
       );
     }
 
+    // Email is already taken
     return NextResponse.json(
-      { message: 'Failed to create user' },
-      { status: 500 }
+      { message: 'email is already in use' },
+      { status: 409 }
     );
+  } catch (error) {
+    return NextResponse.json({ status: 500 });
   }
-
-  // Username is already taken
-  return NextResponse.json({ message: 'Username is taken' }, { status: 409 });
 }

@@ -7,10 +7,10 @@ export const GET = withAuth(async (req) => {
     const user = req.user;
     const foundUser = await findUserById(user.id);
 
-    const favorites = foundUser?.favorites || [];
+    const email = foundUser?.email || '';
 
     return NextResponse.json(
-      { message: 'Successfully retrieved favorites', favorites },
+      { message: 'Successfully retrieved email', email },
       { status: 200 }
     );
   } catch (error) {

@@ -5,9 +5,13 @@ import FormSection from '../Sections/FormSection';
 import { useForm } from 'react-hook-form';
 import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
-import './form.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { setEmail, setLoggedIn, setFavorites } from '@/app/redux/authSlice';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import './form.css';
+import { useRouter } from 'next/navigation';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -22,16 +26,17 @@ const SettingsForm = () => {
     confirmPassword: false,
     currentPassword: false,
   });
+  const router = useRouter();
 
-  const emailForm = useForm()
-  const passwordForm = useForm()
+  const emailForm = useForm();
+  const passwordForm = useForm();
 
   const {
     register: registerEmail,
     handleSubmit: handleSubmitEmail,
     watch: watchEmail,
     reset: resetEmail,
-    formState: { errors: errorsEmail},
+    formState: { errors: errorsEmail },
   } = useForm();
 
   const {
@@ -39,24 +44,84 @@ const SettingsForm = () => {
     handleSubmit: handleSubmitPassword,
     watch: watchPassword,
     reset: resetPassword,
-    formState: { errors: errorsPassword},
+    formState: { errors: errorsPassword },
   } = useForm();
 
   const password = watchPassword('password');
   const email = watchEmail('email');
 
+  const handleLogout = async () => {
+    dispatch(setLoggedIn(false));
+    dispatch(setFavorites([]));
+    dispatch(setEmail(''));
+
+    const response = await axios.get('/api/users/auth/logout', {
+      withCredentials: true,
+    });
+
+    if (response.status === 200) {
+      toast.success('Logout successful', {
+        theme: 'colored',
+      });
+
+      router.push('/');
+    }
+  };
+
   const onSubmitEmail = async (data) => {
     resetEmail();
-  }
+    try {
+      const response = await axios.put(
+        '/api/users/auth/update',
+        {
+          email: data.email,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        dispatch(setEmail(data.email));
+        toast.success('Email change successful', {
+          theme: 'colored',
+        });
+        handleLogout();
+      }
+    } catch (error) {
+      toast.error('Email change failed. Please try again later.', {
+        theme: 'colored',
+      });
+    }
+  };
 
   const onSubmitPassword = async (data) => {
     resetPassword();
-  }
+    try {
+      const response = await axios.put(
+        '/api/users/auth/update',
+        {
+          currentPassword: data.currentPassword,
+          newPassword: data.password,
+        },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        toast.success('Password change successful', {
+          theme: 'colored',
+        });
+        handleLogout();
+      }
+    } catch (error) {
+      toast.error('Password change failed. Please try again later.', {
+        theme: 'colored',
+      });
+    }
+  };
 
   return (
     <div id="settings-form">
       <FormSection title="Change Email">
-        <Form method='POST' onSubmit={handleSubmitEmail(onSubmitEmail)}>
+        <Form method="POST" onSubmit={handleSubmitEmail(onSubmitEmail)}>
           <Form.Group className="mb-4">
             <Form.Label
               htmlFor="current-email"
@@ -139,7 +204,7 @@ const SettingsForm = () => {
 
           <Form.Group>
             <button
-              type='submit'
+              type="submit"
               className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Update Email
@@ -149,7 +214,7 @@ const SettingsForm = () => {
       </FormSection>
 
       <FormSection title="Change Password">
-        <Form method='POST' onSubmit={handleSubmitPassword(onSubmitPassword)}>
+        <Form method="POST" onSubmit={handleSubmitPassword(onSubmitPassword)}>
           <Form.Group className="mb-4">
             <Form.Label
               htmlFor="current-password"
@@ -192,14 +257,14 @@ const SettingsForm = () => {
               </button>
             </div>
             {errorsPassword.currentPassword && (
-                <Form.Text
-                  aria-live="polite"
-                  role="alert"
-                  className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
-                >
-                  {errorsPassword.currentPassword.message}
-                </Form.Text>
-              )}
+              <Form.Text
+                aria-live="polite"
+                role="alert"
+                className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
+              >
+                {errorsPassword.currentPassword.message}
+              </Form.Text>
+            )}
           </Form.Group>
           <Form.Group className="mb-4">
             <Form.Label
@@ -210,7 +275,7 @@ const SettingsForm = () => {
             </Form.Label>
             <div className="password-container flex items-center border">
               <Form.Control
-                autoComplete='off'
+                autoComplete="off"
                 type={showPassword.password ? 'text' : 'password'}
                 id="password"
                 name="password"
@@ -251,14 +316,14 @@ const SettingsForm = () => {
               </button>
             </div>
             {errorsPassword.password && (
-                <Form.Text
-                  aria-live="polite"
-                  role="alert"
-                  className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
-                >
-                  {errorsPassword.password.message}
-                </Form.Text>
-              )}
+              <Form.Text
+                aria-live="polite"
+                role="alert"
+                className={`text-red-500 mt-2 font-bold !text-sm ${nunito.className}`}
+              >
+                {errorsPassword.password.message}
+              </Form.Text>
+            )}
           </Form.Group>
           <Form.Group className="mb-4">
             <Form.Label
@@ -269,7 +334,7 @@ const SettingsForm = () => {
             </Form.Label>
             <div className="password-container flex items-center border">
               <Form.Control
-                autoComplete='off'
+                autoComplete="off"
                 type={showPassword.confirmPassword ? 'text' : 'password'}
                 id="confirm-password"
                 name="confirmPassword"
@@ -316,7 +381,7 @@ const SettingsForm = () => {
           </Form.Group>
           <Form.Group className="mb-4">
             <button
-              type='submit'
+              type="submit"
               className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Update Password
@@ -329,7 +394,7 @@ const SettingsForm = () => {
         <Form>
           <Form.Group className="flex flex-col">
             <button
-              type='submit'
+              type="submit"
               className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Delete Account

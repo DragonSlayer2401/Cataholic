@@ -1,5 +1,6 @@
 import {
   findUserById,
+  hashPassword,
   updateUser,
   verifyPassword,
 } from '@/controllers/userController';
@@ -11,6 +12,7 @@ export const PUT = withAuth(async (req) => {
     const user = req.user;
     const body = await req.json();
     const { email, currentPassword, newPassword } = body;
+    let hashedPassword;
 
     if (currentPassword && newPassword) {
       const foundUser = await findUserById(user.id);
@@ -22,11 +24,13 @@ export const PUT = withAuth(async (req) => {
           { status: 401 }
         );
       }
+
+      hashedPassword = await hashPassword(newPassword);
     }
 
     const updatedUser = await updateUser(user.id, {
       email,
-      password: newPassword,
+      password: hashedPassword || undefined,
     });
 
     if (!updatedUser) {

@@ -3,6 +3,7 @@ import CardSection from '../components/Sections/CardSection';
 import HeroSection from '../components/Sections/HeroSection';
 import axios from 'axios';
 import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
+import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 
 const getImages = async (breeds) => {
   try {

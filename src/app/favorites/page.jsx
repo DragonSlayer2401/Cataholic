@@ -15,7 +15,7 @@ export default async function Favorites() {
   return (
     <>
       <ReduxWrapper preloadedState={preloadedState}>
-        <main>
+        <main className='min-h-dvh'>
           <FavoriteCardsSection title="Favorites" initialImages={images} />
         </main>
       </ReduxWrapper>

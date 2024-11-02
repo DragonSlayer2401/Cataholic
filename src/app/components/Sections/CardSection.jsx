@@ -42,6 +42,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
   const visibleImagesRef = useRef(visibleImages);
   const imagesLengthRef = useRef(images.length);
 
+
   const getImages = async () => {
     setLoading(true);
     try {

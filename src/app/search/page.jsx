@@ -1,10 +1,8 @@
-import NavBar from '../components/Header/NavBar';
 import CardSection from '../components/Sections/CardSection';
 import HeroSection from '../components/Sections/HeroSection';
 import axios from 'axios';
 import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
-import Footer from '../components/Footer/Footer';
 
 const getImages = async (breeds) => {
   try {
@@ -28,9 +26,6 @@ export default async function Search({ searchParams }) {
   const images = await getImages(breeds.split(','));
   return (
     <>
-      <ReduxWrapper preloadedState={preloadedState}>
-        <NavBar />
-      </ReduxWrapper>
       <main>
         <HeroSection
           heading="Welcome to Kitty Paradise!"
@@ -44,7 +39,6 @@ export default async function Search({ searchParams }) {
           />
         </ReduxWrapper>
       </main>
-      <Footer />
     </>
   );
 }

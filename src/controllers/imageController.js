@@ -111,10 +111,11 @@ export const findBreedIds = (breeds) => {
     ['york chocolate', 'ycho'],
   ]);
 
-  const breedIdArray = breeds
-    .map((catBreed) => breedMap.get(catBreed.toLowerCase()))
-    .filter((breedId) => breedId !== undefined);
+  const trimmedBreeds = breeds.map(breed => breed.trim().toLowerCase())
 
+  const breedIdArray = trimmedBreeds
+    .map((catBreed) => breedMap.get(catBreed))
+    .filter((breedId) => breedId !== undefined);
   // Will return an empty array if no matching breeds are found
   return breedIdArray;
 };

@@ -1,10 +1,8 @@
-import NavBar from './components/Header/NavBar';
 import HeroSection from './components/Sections/HeroSection';
 import CardSection from './components/Sections/CardSection';
 import ReduxWrapper from './components/Wrapper/ReduxWrapper';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 import axios from 'axios';
-import Footer from './components/Footer/Footer';
 
 const getImages = async () => {
   try {
@@ -27,9 +25,6 @@ export default async function Home() {
 
   return (
     <>
-      <ReduxWrapper preloadedState={preloadedState}>
-        <NavBar />
-      </ReduxWrapper>
       <main>
         <HeroSection
           heading="Welcome to Kitty Paradise!"
@@ -39,7 +34,6 @@ export default async function Home() {
           <CardSection title="Our Adorable Cats" initialImages={images} />
         </ReduxWrapper>
       </main>
-      <Footer />
     </>
   );
 }

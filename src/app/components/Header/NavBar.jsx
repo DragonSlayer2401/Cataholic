@@ -51,14 +51,18 @@ const NavBar = () => {
   return (
     <header>
       <Navbar
-        expand="md"
-        className="!z-50 py-4 px-6 fixed w-full md:flex md:items-center"
+        expand="lg"
+        className="!z-50 py-4 px-6 fixed w-full lg:flex lg:items-center"
       >
         <Navbar.Brand
           href="/"
           className={`me-auto font-bold ${nunito.className}`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 202.36 96" className='w-[200px] h-[80px]'>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 202.36 96"
+            className="w-[200px] h-[80px]"
+          >
             <g>
               <g>
                 <g>
@@ -157,7 +161,7 @@ const NavBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle className="border-none" />
         <Navbar.Collapse>
-          <Nav className="ms-auto gap-x-4 md:flex md:items-center">
+          <Nav className="ms-auto gap-x-4 lg:flex lg:items-center">
             <Nav.Link href="/" className={`font-bold ${nunito.className}`}>
               Home
             </Nav.Link>
@@ -206,6 +210,12 @@ const NavBar = () => {
                 </Nav.Link>
               </>
             )}
+            <Nav.Link
+              href="/privacy"
+              className={`font-bold ${nunito.className}`}
+            >
+              Privacy
+            </Nav.Link>
             <SearchBar />
           </Nav>
         </Navbar.Collapse>

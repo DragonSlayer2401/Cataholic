@@ -9,15 +9,6 @@ const nunito = Nunito({
 });
 
 const SearchBar = () => {
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const router = useRouter();
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   router.replace(`/search/?q=${searchTerm}`);
-  //   router.refresh();
-  // }
-
   return (
     <form
       className="flex items-center bg-white rounded-3xl p-1 h-full"

@@ -9,7 +9,23 @@ import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 
 export const metadata = {
   title: 'Cataholic',
-  description: 'Find cat images',
+  description: 'Find adorable cat images',
+  openGraph: {
+    title: 'Cataholic',
+    description: 'Find adorable cat images',
+    url: 'https://cataholic.vercel.app',
+    images: [
+      {
+        url: '/thumbnail.png',
+        width: 1200,
+        height: 630,
+        alt: 'Cataholic thumbnail',
+      },
+    ],
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default async function RootLayout({ children }) {
@@ -17,9 +33,9 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`antialiased`}>
-      <ReduxWrapper preloadedState={preloadedState}>
-        <NavBar />
-      </ReduxWrapper>
+        <ReduxWrapper preloadedState={preloadedState}>
+          <NavBar />
+        </ReduxWrapper>
         {children}
         <ToastContainer
           position="top-right"

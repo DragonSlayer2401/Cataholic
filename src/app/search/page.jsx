@@ -16,7 +16,7 @@ const getImages = async (breeds) => {
     return response.data.imageDataArray;
   } catch (error) {
     console.error(error);
-    return [{}];
+    return [];
   }
 };
 
@@ -26,14 +26,14 @@ export default async function Search({ searchParams }) {
   const images = await getImages(breeds.split(','));
   return (
     <>
-      <main>
+      <main className='min-h-dvh'>
         <HeroSection
           heading="Welcome to Kitty Paradise!"
           subheading="Where fluffy tails and purrs make everything better."
         />
         <ReduxWrapper preloadedState={preloadedState}>
           <CardSection
-            title="Our Adorable Cats"
+            title={images.length > 0 ? "Our Adorable Fur Babies" : `Sorry, we do not have any ${breeds} images :(`}
             initialImages={images}
             breeds={breeds}
           />

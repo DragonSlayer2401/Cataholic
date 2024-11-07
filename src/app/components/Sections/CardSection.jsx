@@ -89,6 +89,12 @@ const CardSection = ({ title, initialImages, breeds }) => {
     });
   };
 
+  useEffect(() => {
+    if(images.length === 0) {
+      setHasMoreImages(false);
+    }
+  }, [])
+
   // Update the references when the states change
   useEffect(() => {
     loadingRef.current = loading;
@@ -154,7 +160,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
         {title}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images
+        {images.length > 0 && images
           .slice(0, visibleImages)
           .map((image, index) =>
             index === 0 || imageLoadStates[index - 1] === true ? (

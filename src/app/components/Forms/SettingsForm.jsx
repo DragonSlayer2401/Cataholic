@@ -13,7 +13,7 @@ import axios from 'axios';
 import './form.css';
 import { useRouter } from 'next/navigation';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -30,9 +30,6 @@ const SettingsForm = () => {
     currentPassword: false,
   });
   const router = useRouter();
-
-  const emailForm = useForm();
-  const passwordForm = useForm();
 
   const {
     register: registerEmail,

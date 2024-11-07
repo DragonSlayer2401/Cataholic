@@ -5,6 +5,7 @@ import { Spinner } from 'react-bootstrap';
 import ImageCard from '../Cards/ImageCard';
 import ImageModal from '../Modals/ImageModal';
 import axios from 'axios';
+import DOMPurify from 'isomorphic-dompurify';
 import './section.css';
 
 const nunito = Nunito({
@@ -41,7 +42,6 @@ const CardSection = ({ title, initialImages, breeds }) => {
   const hasMoreImagesRef = useRef(hasMoreImages);
   const visibleImagesRef = useRef(visibleImages);
   const imagesLengthRef = useRef(images.length);
-
 
   const getImages = async () => {
     setLoading(true);
@@ -151,34 +151,37 @@ const CardSection = ({ title, initialImages, breeds }) => {
       <h2
         className={`text-center font-bold mb-10 text-[28px] sm:text-4xl ${nunito.className}`}
       >
-        {title}
+        {DOMPurify.sanitize(title)}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images.length > 0 && images
-          .slice(0, visibleImages)
-          .map((image, index) =>
-            index === 0 || imageLoadStates[index - 1] === true ? (
-              <ImageCard
-                key={image.id}
-                src={image.url}
-                alt={
-                  image.breeds?.length > 0
-                    ? image.breeds[0].name
-                    : 'unknown breed cat'
-                }
-                id={image.id}
-                sendImage={sendImage}
-                length={images.length}
-                imageLoadHandler={() => handleImageLoad(index)}
-              />
-            ) : (
-              <div key={index}></div>
-            )
-          )}
+        {images.length > 0 &&
+          images
+            .slice(0, visibleImages)
+            .map((image, index) =>
+              index === 0 || imageLoadStates[index - 1] === true ? (
+                <ImageCard
+                  key={image.id}
+                  src={image.url}
+                  alt={
+                    image.breeds?.length > 0
+                      ? image.breeds[0].name
+                      : 'unknown breed cat'
+                  }
+                  id={image.id}
+                  sendImage={sendImage}
+                  length={images.length}
+                  imageLoadHandler={() => handleImageLoad(index)}
+                />
+              ) : (
+                <div key={index}></div>
+              )
+            )}
       </div>
-      {images.length > 0 && hasMoreImages && <div ref={loadMoreRef} style={{height: '5px'}}>
+      {images.length > 0 && hasMoreImages && (
+        <div ref={loadMoreRef} style={{ height: '5px' }}>
           <Spinner animation="border" role="status" />
-      </div>}
+        </div>
+      )}
       <ImageModal imageData={imageData} show={show} setShow={setShow} />
     </section>
   );

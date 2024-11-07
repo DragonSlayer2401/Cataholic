@@ -3,7 +3,6 @@ import HeroSection from '../components/Sections/HeroSection';
 import axios from 'axios';
 import ReduxWrapper from '../components/Wrapper/ReduxWrapper';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
-import DOMPurify from 'dompurify';
 
 const getImages = async (breeds) => {
   try {
@@ -38,7 +37,7 @@ const getTitle = async (breeds) => {
 
 export default async function Search({ searchParams }) {
   const preloadedState = await getReduxInitialState();
-  const breeds = DOMPurify.sanitize(searchParams.q);
+  const breeds = searchParams.q;
   const images = await getImages(breeds.split(','));
   return (
     <>

@@ -16,7 +16,7 @@ const getImages = async () => {
     return response.data.imageDataArray;
   } catch (error) {
     console.error(error);
-    return [{}];
+    return [];
   }
 };
 export default async function Home() {
@@ -25,13 +25,13 @@ export default async function Home() {
 
   return (
     <>
-      <main>
+      <main className='min-h-dvh'>
         <HeroSection
           heading="Welcome to Kitty Paradise!"
           subheading="Where fluffy tails and purrs make everything better."
         />
         <ReduxWrapper preloadedState={preloadedState}>
-          <CardSection title="Our Adorable Cats" initialImages={images} />
+          <CardSection title={images.length > 0 ? "Our Adorable Fur Babies" : "Sorry, our fur babies are missing right now :("} initialImages={images} />
         </ReduxWrapper>
       </main>
     </>

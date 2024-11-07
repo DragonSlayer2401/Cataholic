@@ -13,6 +13,7 @@ import axios from 'axios';
 import './form.css';
 import { useRouter } from 'next/navigation';
 import ConfirmationModal from '../Modals/ConfirmationModal';
+import DOMPurify from 'dompurify';
 
 const nunito = Nunito({
   weights: [700, 600, 400],
@@ -163,7 +164,7 @@ const SettingsForm = () => {
               id="current-email"
               name="currentemail"
               readOnly
-              value={currentEmail}
+              value={DOMPurify.sanitize(currentEmail)}
               disabled
               className={`text-base p-3 border cursor-not-allowed ${nunito.className}`}
             />

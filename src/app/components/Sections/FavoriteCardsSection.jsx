@@ -53,7 +53,7 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
       <h2
         className={`text-center font-bold mb-10 text-[28px] sm:text-4xl  ${nunito.className}`}
       >
-        {title}
+        {images.length > 0 ? title : 'You have no favorited fur babies'}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {images

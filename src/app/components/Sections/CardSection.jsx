@@ -89,12 +89,6 @@ const CardSection = ({ title, initialImages, breeds }) => {
     });
   };
 
-  useEffect(() => {
-    if(images.length === 0) {
-      setHasMoreImages(false);
-    }
-  }, [])
-
   // Update the references when the states change
   useEffect(() => {
     loadingRef.current = loading;
@@ -182,7 +176,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
             )
           )}
       </div>
-      {hasMoreImages && <div ref={loadMoreRef} style={{height: '5px'}}>
+      {images.length > 0 && hasMoreImages && <div ref={loadMoreRef} style={{height: '5px'}}>
           <Spinner animation="border" role="status" />
       </div>}
       <ImageModal imageData={imageData} show={show} setShow={setShow} />

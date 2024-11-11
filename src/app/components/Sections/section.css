@@ -23,3 +23,8 @@
 .card-section .spinner-border {
   color: #a971a9 !important;
 }
+
+.image-card-placeholder {
+  width: 250px;
+  height: 187px;
+}

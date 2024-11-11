@@ -70,7 +70,7 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
                 imageLoadHandler={() => handleImageLoad(index)}
               />
             ) : (
-              <div key={index} className='w-[250px] h-[187px]'></div>
+              <div key={index} className='image-card-placeholder'></div>
             )
           )}
       </div>

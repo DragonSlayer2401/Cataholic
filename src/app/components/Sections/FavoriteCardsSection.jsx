@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import ImageModal from '../Modals/ImageModal';
 import ImageCard from '../Cards/ImageCard';
 import { useSelector } from 'react-redux';
+import { set } from 'mongoose';
 
 const nunito = Nunito({
   weights: [700],
@@ -14,8 +15,6 @@ const nunito = Nunito({
 const FavoriteCardsSection = ({ title, initialImages }) => {
   // Store the fetched images
   const [images, setImages] = useState(initialImages);
-  // Store number of viewable images
-  const [visibleImages, setVisibleImages] = useState(initialImages.length);
   // Store the load state of each image
   const [imageLoadStates, setImageLoadStates] = useState([
     ...new Array(initialImages.length).fill(false),
@@ -45,7 +44,6 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
   // Update the images when the favorites change
   useEffect(() => {
     setImages(favorites);
-    setVisibleImages(favorites.length);
   }, [favorites]);
 
   const renderImage = (image, index) => {
@@ -72,7 +70,7 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
         {images.length > 0 ? title : 'You have no favorited fur babies'}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images.slice(0, visibleImages).map(renderImage)}
+        {images.map(renderImage)}
       </div>
       <ImageModal imageData={imageData} show={show} setShow={setShow} />
     </section>

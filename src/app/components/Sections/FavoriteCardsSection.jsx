@@ -1,7 +1,7 @@
 'use client';
 import { Nunito } from 'next/font/google';
 import './section.css';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ImageModal from '../Modals/ImageModal';
 import ImageCard from '../Cards/ImageCard';
 import { useSelector } from 'react-redux';
@@ -28,19 +28,19 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
   const favorites = useSelector((state) => state.auth.favorites);
 
   // Set image data to be showed in Modal
-  const sendImage = (src, alt, id) => {
+  const sendImage = useCallback((src, alt, id) => {
     setShow(true);
     setImageData({ src, alt, id });
-  };
+  }, []);
 
   // Updates the load state of an image
-  const handleImageLoad = (index) => {
+  const handleImageLoad = useCallback((index) => {
     setImageLoadStates((prev) => {
       const newLoadStates = [...prev];
       newLoadStates[index] = true;
       return newLoadStates;
     });
-  };
+  }, []);
 
   // Update the images when the favorites change
   useEffect(() => {

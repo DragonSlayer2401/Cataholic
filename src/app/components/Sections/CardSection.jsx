@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Nunito } from 'next/font/google';
 import { Spinner } from 'react-bootstrap';
 import ImageCard from '../Cards/ImageCard';
@@ -38,12 +38,14 @@ const CardSection = ({ title, initialImages, breeds }) => {
   const loadMoreRef = useRef(null);
 
   // Create references to the states to use inside of the observer to overcome stale closures
-  const loadingRef = useRef(loading);
-  const hasMoreImagesRef = useRef(hasMoreImages);
-  const visibleImagesRef = useRef(visibleImages);
-  const imagesLengthRef = useRef(images.length);
+  const stateRef = useRef({
+    loading,
+    hasMoreImages,
+    visibleImages,
+    imagesLength: images.length,
+  });
 
-  const getImages = async () => {
+  const getImages = useCallback(async () => {
     setLoading(true);
     try {
       // number of images to fetch
@@ -72,29 +74,31 @@ const CardSection = ({ title, initialImages, breeds }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Set image data to be showed in Modal
-  const sendImage = (src, alt, id) => {
+  const sendImage = useCallback((src, alt, id) => {
     setShow(true);
     setImageData({ src, alt, id });
-  };
+  }, []);
 
   // Updates the load state of an image
-  const handleImageLoad = (index) => {
+  const handleImageLoad = useCallback((index) => {
     setImageLoadStates((prev) => {
       const newLoadStates = [...prev];
       newLoadStates[index] = true;
       return newLoadStates;
     });
-  };
+  }, []);
 
   // Update the references when the states change
   useEffect(() => {
-    loadingRef.current = loading;
-    hasMoreImagesRef.current = hasMoreImages;
-    visibleImagesRef.current = visibleImages;
-    imagesLengthRef.current = images.length;
+    stateRef.current = {
+      loading,
+      hasMoreImages,
+      visibleImages,
+      imagesLength: images.length,
+    };
   }, [loading, hasMoreImages, visibleImages, images.length]);
 
   // Fetch images when the component is mounted or page changes
@@ -102,27 +106,21 @@ const CardSection = ({ title, initialImages, breeds }) => {
     if (hasMoreImages && page > 0) {
       getImages();
     }
-  }, [page, hasMoreImages]);
+  }, [page]);
 
   // Create the observer to load more images when the loading spinner is visible
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
+        const { loading, hasMoreImages, visibleImages, imagesLength } =
+          stateRef.current;
         // Display more images when the spinner is visible
-        if (
-          entries[0].isIntersecting &&
-          !loadingRef.current &&
-          hasMoreImagesRef.current
-        ) {
+        if (entries[0].isIntersecting && !loading && hasMoreImages) {
           setVisibleImages((prev) => prev + 12);
         }
 
         // Fetch more images when all images are visible
-        if (
-          visibleImagesRef.current >= imagesLengthRef.current &&
-          !loadingRef.current &&
-          hasMoreImagesRef.current
-        ) {
+        if (visibleImages >= imagesLength && !loading && hasMoreImages) {
           setPage((prev) => prev + 1);
         }
       },
@@ -146,6 +144,28 @@ const CardSection = ({ title, initialImages, breeds }) => {
     };
   }, []);
 
+  const renderImage = (image, index) => {
+    return (
+      index === 0 || imageLoadStates[index - 1] === true ? (
+        <ImageCard
+          key={image.id}
+          src={image.url}
+          alt={
+            image.breeds?.length > 0
+              ? image.breeds[0].name
+              : 'unknown breed cat'
+          }
+          id={image.id}
+          sendImage={sendImage}
+          length={images.length}
+          imageLoadHandler={() => handleImageLoad(index)}
+        />
+      ) : (
+        <div className="image-card-placeholder" key={index}></div>
+      )
+    )
+  }
+
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
       <h2
@@ -157,25 +177,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
         {images.length > 0 &&
           images
             .slice(0, visibleImages)
-            .map((image, index) =>
-              index === 0 || imageLoadStates[index - 1] === true ? (
-                <ImageCard
-                  key={image.id}
-                  src={image.url}
-                  alt={
-                    image.breeds?.length > 0
-                      ? image.breeds[0].name
-                      : 'unknown breed cat'
-                  }
-                  id={image.id}
-                  sendImage={sendImage}
-                  length={images.length}
-                  imageLoadHandler={() => handleImageLoad(index)}
-                />
-              ) : (
-                <div className='image-card-placeholder' key={index}></div>
-              )
-            )}
+            .map(renderImage)}
       </div>
       {images.length > 0 && hasMoreImages && (
         <div ref={loadMoreRef} style={{ height: '5px' }}>

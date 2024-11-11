@@ -4,7 +4,7 @@ import { fetchFavorites } from './fetchFavorites';
 import { fetchEmail } from './fetchEmail';
 
 export const getReduxInitialState = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
   let loggedIn = false;
   let email = '';

@@ -20,7 +20,6 @@ const getImages = async () => {
   }
 };
 export default async function Home() {
-  const preloadedState = await getReduxInitialState();
   const images = await getImages();
 
   return (
@@ -30,7 +29,7 @@ export default async function Home() {
           heading="Welcome to Kitty Paradise!"
           subheading="Where fluffy tails and purrs make everything better."
         />
-        <ReduxWrapper preloadedState={preloadedState}>
+        <ReduxWrapper>
           <CardSection title={images.length > 0 ? "Our Adorable Fur Babies" : "Sorry, our fur babies are missing right now :("} initialImages={images} />
         </ReduxWrapper>
       </main>

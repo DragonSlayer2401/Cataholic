@@ -6,7 +6,7 @@ export const fetchEmail = async () => {
     let response;
 
     if (typeof window === 'undefined') {
-      const cookieStore = cookies();
+      const cookieStore = await cookies();
       const allCookies = cookieStore.getAll();
       const cookieHeader = allCookies
         .map((cookie) => `${cookie.name}=${cookie.value}`)

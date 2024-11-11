@@ -15,7 +15,7 @@ export default async function Settings() {
     <>
       <main>
         <GeneralSection title="Account Settings">
-          <ReduxWrapper preloadedState={preloadedState}>
+          <ReduxWrapper>
             <SettingsForm />
           </ReduxWrapper>
         </GeneralSection>

@@ -7,7 +7,7 @@ import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 const getImages = async (breeds) => {
   try {
     // number of images to fetch
-    const limit = 12;
+    const limit = 8;
 
     const response = await axios.get(
       `${process.env.BASE_URL}/api/images?limit=${limit}&page=0&breeds=${breeds}`
@@ -36,6 +36,7 @@ const getTitle = async (breeds) => {
 };
 
 export default async function Search({ searchParams }) {
+  const preloadedState = await getReduxInitialState();
   const breeds = searchParams.q;
   const images = await getImages(breeds.split(','));
   return (
@@ -45,7 +46,7 @@ export default async function Search({ searchParams }) {
           heading="Welcome to Kitty Paradise!"
           subheading="Where fluffy tails and purrs make everything better."
         />
-        <ReduxWrapper>
+        <ReduxWrapper preloadedState={preloadedState}>
           <CardSection
             title={
               images.length > 0

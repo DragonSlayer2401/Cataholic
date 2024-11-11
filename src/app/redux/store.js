@@ -17,15 +17,20 @@ const initializeStore = (preloadedState) => {
   // Will create a new store on the server and use existing store on the client
   let _store = store ?? initStore(preloadedState);
 
-  if (typeof window === 'undefined') return _store;
+  if (typeof window === 'undefined') {
+    return _store;
+  }
 
   if (!store) store = _store;
 
   return store;
 };
 
-export const useStore = (preloadedState) => { 
-  const store = useMemo(() => initializeStore(preloadedState), [preloadedState]);
+export const useStore = (preloadedState) => {
+  const store = useMemo(
+    () => initializeStore(preloadedState),
+    [preloadedState]
+  );
   return store;
 };
 

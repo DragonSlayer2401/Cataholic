@@ -7,7 +7,7 @@ import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
 const getImages = async (breeds) => {
   try {
     // number of images to fetch
-    const limit = 12;
+    const limit = 8;
 
     const response = await axios.get(
       `${process.env.BASE_URL}/api/images?limit=${limit}&page=0&breeds=${breeds}`

@@ -173,7 +173,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
                   imageLoadHandler={() => handleImageLoad(index)}
                 />
               ) : (
-                <div key={index}></div>
+                <div className='image-card-placeholder' key={index}></div>
               )
             )}
       </div>

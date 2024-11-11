@@ -108,7 +108,7 @@
 
 #image-modal .modal-content {
   max-width: 800px;
-  width: 90vw !important;
+  width: 90dvw !important;
 }
 
 /* Image styling inside image modal */
@@ -147,14 +147,14 @@
 /* Tablet-specific styling */
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   #image-modal .modal-content {
-    width: 80vw !important;
+    width: 80dvw !important;
   }
 }
 
 /* Mobile-specific styling */
 @media screen and (max-width: 767px) {
   .modal-content {
-    width: 95vw !important;
+    width: 95dvw !important;
   }
 
   #auth-modal .modal-content {

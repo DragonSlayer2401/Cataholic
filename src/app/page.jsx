@@ -7,7 +7,7 @@ import axios from 'axios';
 const getImages = async () => {
   try {
     // number of images to fetch
-    const limit = 12;
+    const limit = 8;
 
     const response = await axios.get(
       `${process.env.BASE_URL}/api/images?limit=${limit}&page=0`

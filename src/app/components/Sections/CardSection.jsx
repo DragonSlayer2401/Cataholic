@@ -23,7 +23,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
   // Store whether or not there are more images to fetch
   const [hasMoreImages, setHasMoreImages] = useState(true);
   // Store number of viewable images
-  const [visibleImages, setVisibleImages] = useState(12);
+  const [visibleImages, setVisibleImages] = useState(8);
   // Store the load state of each image
   const [imageLoadStates, setImageLoadStates] = useState([
     ...new Array(initialImages.length).fill(false),

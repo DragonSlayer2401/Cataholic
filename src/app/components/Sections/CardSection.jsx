@@ -74,7 +74,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
     } finally {
       setLoading(false);
     }
-  });
+  }, []);
 
   // Set image data to be showed in Modal
   const sendImage = useCallback((src, alt, id) => {
@@ -144,6 +144,28 @@ const CardSection = ({ title, initialImages, breeds }) => {
     };
   }, []);
 
+  const renderImage = (image, index) => {
+    return (
+      index === 0 || imageLoadStates[index - 1] === true ? (
+        <ImageCard
+          key={image.id}
+          src={image.url}
+          alt={
+            image.breeds?.length > 0
+              ? image.breeds[0].name
+              : 'unknown breed cat'
+          }
+          id={image.id}
+          sendImage={sendImage}
+          length={images.length}
+          imageLoadHandler={() => handleImageLoad(index)}
+        />
+      ) : (
+        <div className="image-card-placeholder" key={index}></div>
+      )
+    )
+  }
+
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
       <h2
@@ -155,25 +177,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
         {images.length > 0 &&
           images
             .slice(0, visibleImages)
-            .map((image, index) =>
-              index === 0 || imageLoadStates[index - 1] === true ? (
-                <ImageCard
-                  key={image.id}
-                  src={image.url}
-                  alt={
-                    image.breeds?.length > 0
-                      ? image.breeds[0].name
-                      : 'unknown breed cat'
-                  }
-                  id={image.id}
-                  sendImage={sendImage}
-                  length={images.length}
-                  imageLoadHandler={() => handleImageLoad(index)}
-                />
-              ) : (
-                <div className="image-card-placeholder" key={index}></div>
-              )
-            )}
+            .map(renderImage)}
       </div>
       {images.length > 0 && hasMoreImages && (
         <div ref={loadMoreRef} style={{ height: '5px' }}>

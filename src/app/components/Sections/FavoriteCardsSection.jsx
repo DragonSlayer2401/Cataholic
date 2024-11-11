@@ -48,6 +48,22 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
     setVisibleImages(favorites.length);
   }, [favorites]);
 
+  const renderImage = (image, index) => {
+    return index === 0 || imageLoadStates[index - 1] === true ? (
+      <ImageCard
+        key={image.id}
+        src={image.src}
+        alt={image.alt}
+        id={image.id}
+        sendImage={sendImage}
+        length={images.length}
+        imageLoadHandler={() => handleImageLoad(index)}
+      />
+    ) : (
+      <div className="image-card-placeholder" key={index}></div>
+    );
+  };
+
   return (
     <section className="card-section pt-[198px] pb-[60px]  flex flex-col justify-center items-center">
       <h2
@@ -56,23 +72,7 @@ const FavoriteCardsSection = ({ title, initialImages }) => {
         {images.length > 0 ? title : 'You have no favorited fur babies'}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images
-          .slice(0, visibleImages)
-          .map((image, index) =>
-            index === 0 || imageLoadStates[index - 1] === true ? (
-              <ImageCard
-                key={image.id}
-                src={image.src}
-                alt={image.alt}
-                id={image.id}
-                sendImage={sendImage}
-                length={images.length}
-                imageLoadHandler={() => handleImageLoad(index)}
-              />
-            ) : (
-              <div key={index} className='image-card-placeholder'></div>
-            )
-          )}
+        {images.slice(0, visibleImages).map(renderImage)}
       </div>
       <ImageModal imageData={imageData} show={show} setShow={setShow} />
     </section>

@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import './card.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 
-const ImageCard = ({ src, alt, id, sendImage, imageLoadHandler }) => {
+const ImageCard = memo(({ src, alt, id, sendImage, imageLoadHandler }) => {
   const [initialRender, setInitialRender] = useState(true);
   const imageRef = useRef(null);
 
@@ -44,6 +44,6 @@ const ImageCard = ({ src, alt, id, sendImage, imageLoadHandler }) => {
       />
     </motion.div>
   );
-};
+});
 
 export default ImageCard;

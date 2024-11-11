@@ -45,7 +45,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
     imagesLength: images.length,
   });
 
-  const getImages = async () => {
+  const getImages = useCallback(async () => {
     setLoading(true);
     try {
       // number of images to fetch
@@ -74,7 +74,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   // Set image data to be showed in Modal
   const sendImage = useCallback((src, alt, id) => {
@@ -115,20 +115,12 @@ const CardSection = ({ title, initialImages, breeds }) => {
         const { loading, hasMoreImages, visibleImages, imagesLength } =
           stateRef.current;
         // Display more images when the spinner is visible
-        if (
-          entries[0].isIntersecting &&
-          !loading &&
-          hasMoreImages
-        ) {
+        if (entries[0].isIntersecting && !loading && hasMoreImages) {
           setVisibleImages((prev) => prev + 12);
         }
 
         // Fetch more images when all images are visible
-        if (
-          visibleImages >= imagesLength &&
-          !loading &&
-          hasMoreImages
-        ) {
+        if (visibleImages >= imagesLength && !loading && hasMoreImages) {
           setPage((prev) => prev + 1);
         }
       },

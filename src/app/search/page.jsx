@@ -36,7 +36,6 @@ const getTitle = async (breeds) => {
 };
 
 export default async function Search({ searchParams }) {
-  const preloadedState = await getReduxInitialState();
   const breeds = searchParams.q;
   const images = await getImages(breeds.split(','));
   return (
@@ -46,7 +45,7 @@ export default async function Search({ searchParams }) {
           heading="Welcome to Kitty Paradise!"
           subheading="Where fluffy tails and purrs make everything better."
         />
-        <ReduxWrapper preloadedState={preloadedState}>
+        <ReduxWrapper>
           <CardSection
             title={
               images.length > 0

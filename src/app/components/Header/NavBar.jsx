@@ -165,7 +165,7 @@ const NavBar = () => {
             <Nav.Link href="/" className={`font-bold ${nunito.className}`}>
               Home
             </Nav.Link>
-            {loggedIn !== undefined && loggedIn ? (
+            {loggedIn ? (
               <>
                 <Nav.Link
                   href="/favorites"

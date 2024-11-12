@@ -177,6 +177,7 @@ const NavBar = () => {
                 <NavDropdown
                   title="Profile"
                   className={`font-bold ${nunito.className}`}
+                  onClick={() => document.activeElement.blur()}
                 >
                   <NavDropdown.Item
                     href="/settings"

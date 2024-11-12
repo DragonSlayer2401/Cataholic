@@ -38,7 +38,7 @@
 /* Focus state for navigation links and brand */
 .nav-link:focus,
 .navbar-brand svg:focus {
-  color: white !important;
+  color: #ffffff !important;
 }
 
 /* Visible focus and search bar focus-within state */
@@ -76,4 +76,18 @@
 
 .navbar-brand:hover .cls-1 {
   fill: #a971a9 !important;
+}
+
+.dropdown-menu {
+  border-color: #a971a9 !important;
+}
+
+.dropdown-item {
+  color: #a971a9;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  color: #ffffff;
+  background-color: #a971a9;
 }

@@ -148,7 +148,11 @@ const SettingsForm = () => {
   return (
     <div id="settings-form" className="px-5">
       <FormSection title="Change Email">
-        <Form method="POST" onSubmit={handleSubmitEmail(onSubmitEmail)} noValidate>
+        <Form
+          method="POST"
+          onSubmit={handleSubmitEmail(onSubmitEmail)}
+          noValidate
+        >
           <Form.Group className="mb-4">
             <Form.Label
               htmlFor="current-email"
@@ -241,7 +245,11 @@ const SettingsForm = () => {
       </FormSection>
 
       <FormSection title="Change Password">
-        <Form method="POST" onSubmit={handleSubmitPassword(onSubmitPassword)} noValidate>
+        <Form
+          method="POST"
+          onSubmit={handleSubmitPassword(onSubmitPassword)}
+          noValidate
+        >
           <Form.Group className="mb-4">
             <Form.Label
               htmlFor="current-password"

@@ -9,7 +9,8 @@
   background: #a971a9;
 }
 
-#settings-form label {
+#settings-form label,
+#forgot-form label {
   color: #a971a9;
 }
 
@@ -21,18 +22,21 @@
 
 #settings-form input,
 #forgot-form input,
-#settings-form .password-container {
+#settings-form .password-container,
+#forgot-form .password-container {
   color: #a971a9 !important;
   border-color: #a971a9 !important;
   border-radius: 8px !important;
 }
 
-#settings-form .password-container {
+#settings-form .password-container,
+#forgot-form .password-container {
   background: #ffffff;
 }
 
 /* Focus state styling for password container and buttons */
 #settings-form .password-container:focus-visible,
+#forgot-form .password-container:focus-visible,
 #settings-form button:focus-visible,
 #forgot-form button:focus-visible {
   outline: 2px solid #a971a9 !important;
@@ -46,6 +50,8 @@
 }
 
 #settings-form .password-visible,
-#settings-form .password-hidden {
+#settings-form .password-hidden,
+#forgot-form .password-visible,
+#forgot-form .password-hidden {
   color: #ffb6c1;
 }

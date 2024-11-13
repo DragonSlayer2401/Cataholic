@@ -1,9 +1,19 @@
+import { verifyJWT } from '@/lib/utils/verifyJWT';
 import ForgotPasswordForm from '../components/Forms/ForgotPasswordForm';
 import GeneralSection from '../components/Sections/GeneralSection';
+import { redirect } from 'next/navigation';
 
 export default async function ForgotPassword({ searchParams }) {
   const params = await searchParams;
   const token = params?.token;
+
+  if (token) {
+    const success = verifyJWT(token);
+
+    if (!success) {
+      redirect('/');
+    }
+  }
 
   return (
     <>

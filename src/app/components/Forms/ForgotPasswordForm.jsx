@@ -19,6 +19,7 @@ const ForgotPasswordForm = ({ type }) => {
     password: false,
     confirmPassword: false,
   });
+  const [loading, setLoading] = useState(false);
 
   const {
     register: registerEmail,
@@ -37,6 +38,7 @@ const ForgotPasswordForm = ({ type }) => {
 
   const onSubmitEmail = async (data) => {
     resetEmail();
+    setLoading(true);
     try {
       const response = await axios.post('/api/users/forgot-password', {
         email: data.email,
@@ -54,6 +56,7 @@ const ForgotPasswordForm = ({ type }) => {
         });
       }
     }
+    setLoading(false);
   };
 
   const onSubmitPassword = async (data) => {
@@ -104,6 +107,8 @@ const ForgotPasswordForm = ({ type }) => {
           <Form.Group>
             <button
               type="submit"
+              disabled={loading}
+              style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
               className={`submit-button text-base py-3 px-4 font-bold w-full rounded-3xl text-white ${nunito.className}`}
             >
               Reset Password

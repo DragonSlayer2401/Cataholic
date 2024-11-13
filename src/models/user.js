@@ -16,8 +16,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, 'Invalid Password'],
     },
-    resetToken: { type: String },
-    resetTokenExpires: { type: Date },
     favorites: [
       {
         id: { type: String, required: true, index: true },

@@ -4,8 +4,8 @@
   transition: background-color 0.3s ease;
 }
 
-#settings-form .submit-button:hover,
-#forgot-form .submit-button:hover {
+#settings-form .submit-button:not(:disabled):hover,
+#forgot-form .submit-button:not(:disabled):hover {
   background: #a971a9;
 }
 

@@ -1,9 +1,11 @@
-#settings-form .submit-button {
+#settings-form .submit-button,
+#forgot-form .submit-button {
   background: #ffb6c1;
   transition: background-color 0.3s ease;
 }
 
-#settings-form .submit-button:hover {
+#settings-form .submit-button:hover,
+#forgot-form .submit-button:hover {
   background: #a971a9;
 }
 
@@ -12,11 +14,13 @@
 }
 
 #settings-form label,
-#settings-form input::placeholder {
+#settings-form input::placeholder,
+#forgot-form input::placeholder {
   color: #a971a9 !important;
 }
 
 #settings-form input,
+#forgot-form input,
 #settings-form .password-container {
   color: #a971a9 !important;
   border-color: #a971a9 !important;
@@ -29,13 +33,15 @@
 
 /* Focus state styling for password container and buttons */
 #settings-form .password-container:focus-visible,
-#settings-form button:focus-visible {
+#settings-form button:focus-visible,
+#forgot-form button:focus-visible {
   outline: 2px solid #a971a9 !important;
   box-shadow: none !important;
 }
 
 /* Remove focus shadow for input fields */
-#settings-form input:focus {
+#settings-form input:focus,
+#forgot-form input:focus {
   box-shadow: none !important;
 }
 

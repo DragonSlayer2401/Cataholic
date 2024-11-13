@@ -10,6 +10,7 @@ import axios from 'axios';
 import './modal.css';
 import { useDispatch } from 'react-redux';
 import { setLoggedIn } from '../../redux/authSlice';
+import Link from 'next/link';
 
 const nunito = Nunito({
   weights: [400, 700],
@@ -257,6 +258,16 @@ const AuthModal = ({ show, setShow, title, type }) => {
               >
                 {errors.password.message}
               </Form.Text>
+            )}
+            {type === 'login' && (
+              <Link
+                href="/forgot-password"
+                id="forgot-password-link"
+                onClick={() => setShow(false)}
+                className={`font-bold text-base block ${nunito.className}`}
+              >
+                Forgot password?
+              </Link>
             )}
           </Form.Group>
           {type === 'signup' && (

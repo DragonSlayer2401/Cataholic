@@ -102,6 +102,15 @@
   color: #ffb6c1;
 }
 
+#auth-modal #forgot-password-link {
+  color: #ffb6c1;
+  transition: color 0.3s ease;
+}
+
+#auth-modal #forgot-password-link:hover {
+  color: #a971a9;
+}
+
 /* =========================
    Image Modal Styles
    ========================= */

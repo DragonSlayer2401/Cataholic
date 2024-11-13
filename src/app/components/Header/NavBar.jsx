@@ -196,7 +196,10 @@ const NavBar = () => {
             ) : (
               <>
                 <Nav.Link
-                  onClick={() => handleAuthModal('Welcome Back!', 'login')}
+                  onClick={() => {
+                    handleAuthModal('Welcome Back!', 'login');
+                    document.activeElement.blur();
+                  }}
                   className={`font-bold ${nunito.className}`}
                 >
                   Login

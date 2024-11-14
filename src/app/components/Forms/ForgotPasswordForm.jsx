@@ -8,6 +8,7 @@ import { FaEye } from 'react-icons/fa6';
 import { PiEyeClosedBold } from 'react-icons/pi';
 import axios from 'axios';
 import './form.css';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const nunito = Nunito({
   weights: [700, 400],
@@ -20,6 +21,8 @@ const ForgotPasswordForm = ({ type }) => {
     confirmPassword: false,
   });
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const {
     register: registerEmail,
@@ -40,13 +43,13 @@ const ForgotPasswordForm = ({ type }) => {
     resetEmail();
     setLoading(true);
     try {
-      const response = await axios.post('/api/users/forgot-password', {
+      await axios.post('/api/users/forgot-password', {
         email: data.email,
       });
       toast.success('Email sent successfully', { theme: 'colored' });
     } catch (error) {
       console.error(error);
-      if (error.response.status === 404) {
+      if (error.response?.status === 404) {
         toast.error('No account found', {
           theme: 'colored',
         });
@@ -61,6 +64,33 @@ const ForgotPasswordForm = ({ type }) => {
 
   const onSubmitPassword = async (data) => {
     resetPassword();
+    try {
+      const response = await axios.put(
+        '/api/users/reset-password',
+        {
+          newPassword: data.password,
+          token: searchParams.get('token'),
+        },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        toast.success('Password reset successful. Please login.', {
+          theme: 'colored',
+        });
+        router.push('/');
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error('Unauthorized', {
+          theme: 'colored',
+        });
+      } else {
+        toast.error('Password reset failed. Please try again later.', {
+          theme: 'colored',
+        });
+      }
+    }
   };
 
   const password = watchPassword('password');
@@ -212,6 +242,7 @@ const ForgotPasswordForm = ({ type }) => {
                     confirmPassword: !showPassword.confirmPassword,
                   })
                 }
+                style={{ cursor: loading ? 'not-allowed' : 'pointer' }}
                 className="password-toggle mr-1"
               >
                 {showPassword.confirmPassword ? (

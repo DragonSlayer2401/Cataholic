@@ -114,7 +114,7 @@ const SettingsForm = () => {
         handleLogout();
       }
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         toast.error('Invalid current password. Please try again.', {
           theme: 'colored',
         });

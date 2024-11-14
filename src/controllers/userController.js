@@ -54,7 +54,7 @@ export const createUser = async (userObj) => {
 // Updates username or password
 export const updateUser = async (userId, updateObj) => {
   await dbConnect();
-
+ 
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,

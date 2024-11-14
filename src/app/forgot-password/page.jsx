@@ -19,7 +19,7 @@ export default async function ForgotPassword({ searchParams }) {
     <>
       <main className="min-h-dvh">
         <GeneralSection title="Forgot Password">
-          <ForgotPasswordForm type={token ? 'reset' : 'forgot'} />
+          <ForgotPasswordForm type={token ? 'reset' : 'forgot'} token={token} />
         </GeneralSection>
       </main>
     </>

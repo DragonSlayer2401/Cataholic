@@ -91,7 +91,7 @@ const AuthModal = ({ show, setShow, title, type }) => {
         await loginUser(data);
       }
     } catch (error) {
-      if (error.response.status === 409) {
+      if (error.response?.status === 409) {
         toast.error('Email is already in use', {
           theme: 'colored',
         });

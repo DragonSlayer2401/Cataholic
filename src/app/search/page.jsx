@@ -37,7 +37,8 @@ const getTitle = async (breeds) => {
 
 export default async function Search({ searchParams }) {
   const preloadedState = await getReduxInitialState();
-  const breeds = searchParams.q;
+  const params = await searchParams;
+  const breeds = params.q;
   const images = await getImages(breeds.split(','));
   return (
     <>

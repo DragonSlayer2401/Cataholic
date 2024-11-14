@@ -14,10 +14,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      match: [
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-        'Invalid Password',
-      ],
+      match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/, 'Invalid Password'],
     },
     favorites: [
       {

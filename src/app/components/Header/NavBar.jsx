@@ -229,6 +229,7 @@ const NavBar = () => {
         setShow={setShow}
         title={modalData.title}
         type={modalData.type}
+        setModalData={setModalData}
       />
     </header>
   );

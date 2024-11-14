@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { MdCancel, MdCheckCircle } from 'react-icons/md';
@@ -22,7 +22,7 @@ const chewy = Chewy({
   subsets: ['latin'],
 });
 
-const AuthModal = ({ show, setShow, title, type }) => {
+const AuthModal = ({ show, setShow, title, type, setModalData }) => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState({
     password: false,
@@ -333,6 +333,37 @@ const AuthModal = ({ show, setShow, title, type }) => {
           >
             {type === 'login' ? 'Login' : 'Signup'}
           </button>
+          {type === 'login' ? (
+            <p
+              className={`font-bold text-base mx-auto text-[#a971a9] ${nunito.className}`}
+            >
+              Don't have an account?{' '}
+              <button
+                type="button"
+                onClick={() =>
+                  setModalData({ title: 'Join Our Community!', type: 'signup' })
+                }
+                className={`font-bold text-base bg-transparent switch-modal-text ${nunito.className}`}
+              >
+                Signup
+              </button>
+            </p>
+          ) : (
+            <p
+              className={`font-bold text-base mx-auto text-[#a971a9] ${nunito.className}`}
+            >
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() =>
+                  setModalData({ title: 'Welcome Back!', type: 'login' })
+                }
+                className={`font-bold text-base bg-transparent switch-modal-text ${nunito.className}`}
+              >
+                Login
+              </button>
+            </p>
+          )}
         </Modal.Footer>
       </Form>
     </Modal>

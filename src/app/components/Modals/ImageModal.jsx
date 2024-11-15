@@ -21,9 +21,23 @@ const ImageModal = ({ imageData, show, setShow }) => {
   // Tracks if the component is mounted
   const isMountedRef = useRef(true);
 
-  const updateFavorites = async () => {
+  const addFavoriteToDatabase = async () => {
     try {
-      await axios.put('/api/users/favorites/update', { favorites });
+      await axios.post(
+        `/api/users/favorites/add`,
+        { id: imageData.id, alt: imageData.alt, src: imageData.src },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeFavoriteFromDatabase = async () => {
+    try {
+      await axios.delete(`/api/users/favorites/delete?id=${imageData.id}`, {
+        withCredentials: true,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -33,9 +47,11 @@ const ImageModal = ({ imageData, show, setShow }) => {
     if (isFavorite) {
       setIsFavorite(false);
       dispatch(removeFavorite(imageData.id));
+      removeFavoriteFromDatabase();
     } else {
       setIsFavorite(true);
       dispatch(addFavorite(imageData));
+      addFavoriteToDatabase();
     }
   };
 
@@ -44,10 +60,6 @@ const ImageModal = ({ imageData, show, setShow }) => {
     if (isMountedRef.current) {
       isMountedRef.current = false;
       return;
-    }
-
-    if (loggedIn && !isMountedRef.current) {
-      updateFavorites();
     }
 
     setIsFavorite(favorites.some((favorite) => favorite.id === imageData.id));

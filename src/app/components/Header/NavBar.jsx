@@ -195,8 +195,7 @@ const NavBar = () => {
               </>
             ) : (
               <>
-                <button
-                  type="button"
+                <Nav.Link
                   onClick={() => {
                     handleAuthModal('Welcome Back!', 'login');
                     document.activeElement.blur();
@@ -204,16 +203,15 @@ const NavBar = () => {
                   className={`font-bold nav-link ${nunito.className}`}
                 >
                   Login
-                </button>
-                <button
-                  type="button"
+                </Nav.Link>
+                <Nav.Link
                   onClick={() =>
                     handleAuthModal('Join Our Community!', 'signup')
                   }
                   className={`font-bold nav-link ${nunito.className}`}
                 >
                   Signup
-                </button>
+                </Nav.Link>
               </>
             )}
             <Nav.Link

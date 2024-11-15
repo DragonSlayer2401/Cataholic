@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/db';
 import User from '@/models/user';
+import Favorite from '@/models/favorite';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
@@ -54,7 +55,7 @@ export const createUser = async (userObj) => {
 // Updates username or password
 export const updateUser = async (userId, updateObj) => {
   await dbConnect();
- 
+
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -89,24 +90,71 @@ export const deleteUser = async (userId) => {
   }
 };
 
-// Adds favorited images to a user
-export const updateFavorites = async (userId, favorites) => {
+// Finds a user's favorited images
+export const findFavorites = async (userId, limit, lastCreatedAt) => {
   await dbConnect();
 
   try {
-    const updatedFavorites = await User.findByIdAndUpdate(
-      userId,
-      { $set: { favorites: favorites } },
-      { new: true, runValidators: true }
-    );
+    const query = { userId };
 
-    if (!updatedFavorites) {
+    if (lastCreatedAt) {
+      query.createdAt = { $gt: new Date(lastCreatedAt) }; // Gets results with creation dates greater than the last fetched item
+    }
+
+    const favorites = await Favorite.find(query)
+      .sort({ createdAt: 1 }) // Sort in ascending order
+      .limit(parseInt(limit)) // Returns specified number of results
+      .lean(); // Returns JavaScript objects instead of Mongoose documents
+
+    return favorites;
+  } catch (error) {
+    console.error(`Error finding favorites: ${error.message}`);
+  }
+};
+
+// Adds a favorited images to a user
+export const addFavorites = async (userId, updateObj) => {
+  await dbConnect();
+
+  try {
+    const existingFavorite = await Favorite.findOne({
+      userId,
+      id: updateObj.id,
+    });
+
+    if (existingFavorite) {
       return null;
     }
 
-    return updatedFavorites;
+    const newFavorite = new Favorite({
+      userId,
+      id: updateObj.id,
+      alt: updateObj.alt,
+      src: updateObj.src,
+    });
+
+    const createdFavorite = await newFavorite.save();
+
+    return createdFavorite;
   } catch (error) {
-    console.error(`Error updating favorites: ${error.message}`);
+    console.error(`Error adding favorites: ${error.message}`);
+  }
+};
+
+// Delete a favorited image from a user
+export const deleteFavorites = async (userId, id) => {
+  await dbConnect();
+
+  try {
+    const deletedFavorite = await Favorite.findOneAndDelete({ userId, id });
+
+    if (!deletedFavorite) {
+      return null;
+    }
+
+    return deletedFavorite;
+  } catch (error) {
+    console.error(`Error deleting favorites: ${error.message}`);
   }
 };
 

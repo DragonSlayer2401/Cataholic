@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from 'react';
 import ImageModal from '../Modals/ImageModal';
 import ImageCard from '../Cards/ImageCard';
 import { useSelector } from 'react-redux';
-import { set } from 'mongoose';
 
 const nunito = Nunito({
   weights: [700],

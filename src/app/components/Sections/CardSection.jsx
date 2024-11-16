@@ -46,6 +46,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
   });
 
   const getImages = useCallback(async () => {
+    if (loading) return;
     setLoading(true);
     try {
       // number of images to fetch
@@ -74,7 +75,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loading]);
 
   // Set image data to be showed in Modal
   const sendImage = useCallback((src, alt, id) => {

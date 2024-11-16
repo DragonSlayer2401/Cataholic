@@ -1,6 +1,6 @@
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import { FaRegHeart, FaHeart } from 'react-icons/fa6';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Nunito } from 'next/font/google';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, removeFavorite } from '../../redux/authSlice';
@@ -12,7 +12,7 @@ const nunito = Nunito({
   subsets: ['latin'],
 });
 
-const ImageModal = ({ imageData, show, setShow }) => {
+const ImageModal = memo(({ imageData, show, setShow }) => {
   const loggedIn = useSelector((state) => state.auth.loggedIn);
   const favorites = useSelector((state) => state.auth.favorites);
   const dispatch = useDispatch();
@@ -91,6 +91,6 @@ const ImageModal = ({ imageData, show, setShow }) => {
       </ModalFooter>
     </Modal>
   );
-};
+});
 
 export default ImageModal;

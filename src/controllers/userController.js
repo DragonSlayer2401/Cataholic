@@ -78,32 +78,28 @@ export const deleteUser = async (userId) => {
   await dbConnect();
 
   try {
+    const deletedFavorites = await Favorite.deleteMany({ userId });
     const deletedUser = await User.findByIdAndDelete(userId);
 
-    if (!deletedUser) {
+    if (!deletedUser || !deletedFavorites) {
       return null;
     }
 
-    return deletedUser;
+    return {deletedUser, deletedFavorites};
   } catch (error) {
     console.error(`Error deleting user: ${error.message}`);
   }
 };
 
 // Finds a user's favorited images
-export const findFavorites = async (userId, limit, lastCreatedAt) => {
+export const findFavorites = async (userId) => {
   await dbConnect();
 
   try {
     const query = { userId };
 
-    if (lastCreatedAt) {
-      query.createdAt = { $gt: new Date(lastCreatedAt) }; // Gets results with creation dates greater than the last fetched item
-    }
-
     const favorites = await Favorite.find(query)
       .sort({ createdAt: 1 }) // Sort in ascending order
-      .limit(parseInt(limit)) // Returns specified number of results
       .lean(); // Returns JavaScript objects instead of Mongoose documents
 
     return favorites;

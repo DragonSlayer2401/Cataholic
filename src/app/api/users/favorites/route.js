@@ -4,18 +4,9 @@ import { NextResponse } from 'next/server';
 
 export const GET = withAuth(async (req) => {
   try {
-    const { searchParams } = new URL(req.url);
     const user = req.user;
-    const limit = searchParams.get('limit');
-    const lastItemCreationDate = searchParams.get('date');
-    let favorites;
-
-    if (lastItemCreationDate) {
-      favorites = await findFavorites(user.id, limit, lastItemCreationDate);
-    } else {
-      favorites = await findFavorites(user.id, limit);
-    }
-
+    const favorites = await findFavorites(user.id);
+   
     return NextResponse.json(
       { message: 'Successfully retrieved favorites', favorites },
       { status: 200 }

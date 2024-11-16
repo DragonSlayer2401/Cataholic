@@ -145,26 +145,22 @@ const CardSection = ({ title, initialImages, breeds }) => {
   }, []);
 
   const renderImage = (image, index) => {
-    return (
-      index === 0 || imageLoadStates[index - 1] === true ? (
-        <ImageCard
-          key={image.id}
-          src={image.url}
-          alt={
-            image.breeds?.length > 0
-              ? image.breeds[0].name
-              : 'unknown breed cat'
-          }
-          id={image.id}
-          sendImage={sendImage}
-          length={images.length}
-          imageLoadHandler={() => handleImageLoad(index)}
-        />
-      ) : (
-        <div className="image-card-placeholder" key={index}></div>
-      )
-    )
-  }
+    return index === 0 || imageLoadStates[index - 1] === true ? (
+      <ImageCard
+        key={image.id}
+        src={image.url}
+        alt={
+          image.breeds?.length > 0 ? image.breeds[0].name : 'unknown breed cat'
+        }
+        id={image.id}
+        sendImage={sendImage}
+        length={images.length}
+        imageLoadHandler={() => handleImageLoad(index)}
+      />
+    ) : (
+      <div className="image-card-placeholder" key={index}></div>
+    );
+  };
 
   return (
     <section className="card-section py-[60px] flex flex-col justify-center items-center">
@@ -174,10 +170,7 @@ const CardSection = ({ title, initialImages, breeds }) => {
         {DOMPurify.sanitize(title)}
       </h2>
       <div className="!z-0 px-5 mx-auto mb-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images.length > 0 &&
-          images
-            .slice(0, visibleImages)
-            .map(renderImage)}
+        {images.length > 0 && images.slice(0, visibleImages).map(renderImage)}
       </div>
       {images.length > 0 && hasMoreImages && (
         <div ref={loadMoreRef} style={{ height: '5px' }}>

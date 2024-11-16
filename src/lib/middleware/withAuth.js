@@ -6,7 +6,7 @@ export const withAuth = (handler) => {
     const cookieHeader = req.headers.get('cookie');
     // Extracts token from cookies
     const token = cookieHeader?.split('; ').find((cookie) => cookie.startsWith('token='))?.split('=')[1];
-
+    
     if (!token) {
       return new Response(
         JSON.stringify({ message: 'Unauthorized: No token provided' }),

@@ -9,6 +9,7 @@ export const GET = withAuth(async (req) => {
     const limit = searchParams.get('limit');
     const lastItemCreationDate = searchParams.get('date');
     let favorites;
+    
 
     if (lastItemCreationDate) {
       favorites = await findFavorites(user.id, limit, lastItemCreationDate);

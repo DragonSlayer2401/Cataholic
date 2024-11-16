@@ -2,8 +2,7 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import { FaRegHeart, FaHeart } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import { Nunito } from 'next/font/google';
-import { useDispatch, useSelector } from 'react-redux';
-import { addFavorite, removeFavorite } from '../../redux/authSlice';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import './modal.css';
 
@@ -12,10 +11,8 @@ const nunito = Nunito({
   subsets: ['latin'],
 });
 
-const ImageModal = ({ imageData, show, setShow }) => {
+const ImageModal = ({ imageData, show, setShow, addImage, removeImage }) => {
   const loggedIn = useSelector((state) => state.auth.loggedIn);
-  const favorites = useSelector((state) => state.auth.favorites);
-  const dispatch = useDispatch();
   // Check if the image is a favorite
   const [isFavorite, setIsFavorite] = useState(false);
   // Tracks if the component is mounted
@@ -28,6 +25,10 @@ const ImageModal = ({ imageData, show, setShow }) => {
         { id: imageData.id, alt: imageData.alt, src: imageData.src },
         { withCredentials: true }
       );
+
+      if (addImage) {
+        addImage(imageData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -38,6 +39,10 @@ const ImageModal = ({ imageData, show, setShow }) => {
       await axios.delete(`/api/users/favorites/delete?id=${imageData.id}`, {
         withCredentials: true,
       });
+
+      if (removeImage) {
+        removeImage(imageData.id);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -46,11 +51,9 @@ const ImageModal = ({ imageData, show, setShow }) => {
   const handleFavorite = async () => {
     if (isFavorite) {
       setIsFavorite(false);
-      dispatch(removeFavorite(imageData.id));
       removeFavoriteFromDatabase();
     } else {
       setIsFavorite(true);
-      dispatch(addFavorite(imageData));
       addFavoriteToDatabase();
     }
   };
@@ -62,8 +65,26 @@ const ImageModal = ({ imageData, show, setShow }) => {
       return;
     }
 
-    setIsFavorite(favorites.some((favorite) => favorite.id === imageData.id));
-  }, [favorites, imageData]);
+    const checkStatus = async () => {
+      try {
+        const response = await axios.get(
+          `/api/users/favorites/find?id=${imageData.id}`
+        );
+
+        if (response.status === 200) {
+          setIsFavorite(true);
+        }
+      } catch (error) {
+        setIsFavorite(false);
+
+        if (error.response?.status !== 404) {
+          console.error(error);
+        }
+      }
+    };
+
+    checkStatus();
+  }, [imageData]);
 
   return (
     <Modal

@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import { verifyJWT } from './verifyJWT';
-import { fetchFavorites } from './fetchFavorites';
 import { fetchEmail } from './fetchEmail';
 
 export const getReduxInitialState = async () => {
@@ -8,11 +7,9 @@ export const getReduxInitialState = async () => {
   const token = cookieStore.get('token')?.value;
   let loggedIn = false;
   let email = '';
-  let favorites = [];
 
   if (token) {
     loggedIn = verifyJWT(token);
-    favorites = await fetchFavorites();
     email = await fetchEmail();
   }
 
@@ -20,7 +17,6 @@ export const getReduxInitialState = async () => {
     auth: {
       loggedIn,
       email,
-      favorites,
     },
   };
 

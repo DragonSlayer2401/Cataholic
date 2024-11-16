@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoggedIn } from '../../redux/authSlice';
-import { setFavorites } from '../../redux/authSlice';
 import { setEmail } from '../../redux/authSlice';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -28,7 +27,6 @@ const NavBar = () => {
 
   const handleLogout = async () => {
     dispatch(setLoggedIn(false));
-    dispatch(setFavorites([]));
     dispatch(setEmail(''));
     const response = await axios.get('/api/users/auth/logout', {
       withCredentials: true,

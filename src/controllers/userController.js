@@ -78,15 +78,33 @@ export const deleteUser = async (userId) => {
   await dbConnect();
 
   try {
+    const deletedFavorites = await Favorite.deleteMany({ userId });
     const deletedUser = await User.findByIdAndDelete(userId);
 
-    if (!deletedUser) {
+    if (!deletedUser || !deletedFavorites) {
       return null;
     }
 
-    return deletedUser;
+    return {deletedUser, deletedFavorites};
   } catch (error) {
     console.error(`Error deleting user: ${error.message}`);
+  }
+};
+
+// Finds one favorited image
+export const findFavorite = async (userId, id) => {
+  await dbConnect();
+
+  try {
+    const favorite = await Favorite.findOne({ userId, id });
+
+    if (!favorite) {
+      return null;
+    }
+
+    return favorite;
+  } catch (error) {
+    console.error(`Error finding single favorite ${error.message}`);
   }
 };
 
@@ -106,7 +124,7 @@ export const findFavorites = async (userId, limit, lastCreatedAt) => {
       .limit(parseInt(limit)) // Returns specified number of results
       .lean(); // Returns JavaScript objects instead of Mongoose documents
 
-    return favorites;
+    return favorites || [];
   } catch (error) {
     console.error(`Error finding favorites: ${error.message}`);
   }

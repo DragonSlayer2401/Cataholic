@@ -132,6 +132,8 @@ const SettingsForm = () => {
         withCredentials: true,
       });
 
+      await axios.get(`/api/users/auth/logout`);
+
       if (response.status === 200) {
         toast.success('Account deletion successful', {
           theme: 'colored',

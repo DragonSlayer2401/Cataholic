@@ -12,15 +12,12 @@ export const fetchEmail = async () => {
         .map((cookie) => `${cookie.name}=${cookie.value}`)
         .join('; ');
 
-      response = await axios.get(
-        `${process.env.BASE_URL}/api/users`,
-        {
-          headers: {
-            Cookie: cookieHeader,
-          },
-          withCredentials: true,
-        }
-      );
+      response = await axios.get(`${process.env.BASE_URL}/api/users`, {
+        headers: {
+          Cookie: cookieHeader,
+        },
+        withCredentials: true,
+      });
     } else {
       response = await axios.get(`/api/users`, {
         withCredentials: true,
@@ -28,7 +25,10 @@ export const fetchEmail = async () => {
     }
     return response.data.email;
   } catch (error) {
+    if (error.response.status === 404 || error.response.status === 401) {
+      return '';
+    }
     console.error(error);
-    return [];
+    return '';
   }
 };

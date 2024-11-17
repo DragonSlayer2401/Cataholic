@@ -25,7 +25,7 @@ export const fetchEmail = async () => {
     }
     return response.data.email;
   } catch (error) {
-    if (error.response.status === 404 || error.response.status === 401) {
+    if (error.response?.status === 404 || error.response?.status === 401) {
       return '';
     }
     console.error(error);

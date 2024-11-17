@@ -4,19 +4,15 @@ import { fetchFavorites } from './fetchFavorites';
 import { fetchEmail } from './fetchEmail';
 
 export const getReduxInitialState = async () => {
-  const email = await fetchEmail();
-
-  if (!email) {
-    return { auth: { loggedIn: false, email: '', favorites: [] } };
-  }
-
   const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
   let loggedIn = false;
+  let email = '';
   let favorites = [];
 
   if (token) {
     loggedIn = verifyJWT(token);
+    email = await fetchEmail();
     favorites = await fetchFavorites();
   }
 

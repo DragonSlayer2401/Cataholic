@@ -6,6 +6,7 @@ import Footer from './components/Footer/Footer';
 import ReduxWrapper from './components/Wrapper/ReduxWrapper';
 import NavBar from './components/Header/NavBar';
 import { getReduxInitialState } from '@/lib/utils/fetchReduxInitialState';
+import axios from 'axios';
 
 export const metadata = {
   title: 'Cataholic',
@@ -29,11 +30,17 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const preloadedState = await getReduxInitialState();
+  let preloadedState = await getReduxInitialState();
+  let oldToken;
+
+  if (!preloadedState) {
+    oldToken = true;
+  }
+
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <ReduxWrapper preloadedState={preloadedState}>
+        <ReduxWrapper preloadedState={preloadedState} oldToken={oldToken}>
           <NavBar />
         </ReduxWrapper>
         {children}

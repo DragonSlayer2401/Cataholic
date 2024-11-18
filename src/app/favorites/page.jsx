@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 export default async function Favorites() {
   const preloadedState = await getReduxInitialState();
 
-  if (!preloadedState.auth.loggedIn) {
+  if (!preloadedState?.auth.loggedIn) {
     redirect('/');
   }
 

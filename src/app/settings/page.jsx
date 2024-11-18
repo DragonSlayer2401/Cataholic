@@ -7,7 +7,7 @@ import SettingsForm from '../components/Forms/SettingsForm';
 export default async function Settings() {
   const preloadedState = await getReduxInitialState();
 
-  if (!preloadedState.auth.loggedIn) {
+  if (!preloadedState?.auth.loggedIn) {
     redirect('/');
   }
 
